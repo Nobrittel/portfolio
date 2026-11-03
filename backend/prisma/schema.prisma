@@ -1,0 +1,131 @@
+generator client {
+  provider = "prisma-client"
+  output   = "../generated/prisma"
+}
+
+datasource db {
+  provider = "mysql"
+}
+
+enum MessageStatus {
+  NEW
+  READ
+  HANDLED
+}
+
+model User {
+  id        Int      @id @default(autoincrement())
+  name      String
+  email     String   @unique
+  password  String
+  role      String   @default("admin")
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Category {
+  id       Int       @id @default(autoincrement())
+  slug     String    @unique
+  nameFr   String
+  nameEn   String
+  projects Project[]
+}
+
+model Technology {
+  id       Int       @id @default(autoincrement())
+  name     String    @unique
+  icon     String?
+  group    String?
+  projects Project[]
+}
+
+model Project {
+  id            Int            @id @default(autoincrement())
+  slug          String         @unique
+  titleFr       String
+  titleEn       String
+  shortDescFr   String         @db.VarChar(500)
+  shortDescEn   String         @db.VarChar(500)
+  descriptionFr String         @db.Text
+  descriptionEn String         @db.Text
+  image         String?
+  githubUrl     String?
+  demoUrl       String?
+  progress      String         @default("done")
+  featured      Boolean        @default(false)
+  published     Boolean        @default(false)
+  projectDate   DateTime?
+  categoryId    Int?
+  category      Category?      @relation(fields: [categoryId], references: [id])
+  technologies  Technology[]
+  images        ProjectImage[]
+  createdAt     DateTime       @default(now())
+  updatedAt     DateTime       @updatedAt
+}
+
+model ProjectImage {
+  id        Int     @id @default(autoincrement())
+  url       String
+  projectId Int
+  project   Project @relation(fields: [projectId], references: [id], onDelete: Cascade)
+}
+
+model Skill {
+  id        Int     @id @default(autoincrement())
+  name      String
+  group     String
+  icon      String?
+  sortOrder Int     @default(0)
+}
+
+model Experience {
+  id         Int     @id @default(autoincrement())
+  positionFr String
+  positionEn String
+  company    String
+  location   String?
+  periodFr   String
+  periodEn   String
+  missionsFr Json
+  missionsEn Json
+  tagsFr     Json
+  tagsEn     Json
+  sortOrder  Int     @default(0)
+}
+
+model Education {
+  id          Int     @id @default(autoincrement())
+  diplomaFr   String
+  diplomaEn   String
+  institution String
+  periodFr    String
+  periodEn    String
+  ongoing     Boolean @default(false)
+  sortOrder   Int     @default(0)
+}
+
+model Service {
+  id            Int     @id @default(autoincrement())
+  titleFr       String
+  titleEn       String
+  descriptionFr String  @db.Text
+  descriptionEn String  @db.Text
+  icon          String?
+  sortOrder     Int     @default(0)
+}
+
+model Message {
+  id        Int           @id @default(autoincrement())
+  name      String
+  email     String
+  subject   String
+  content   String        @db.Text
+  status    MessageStatus @default(NEW)
+  createdAt DateTime      @default(now())
+}
+
+model Setting {
+  id    Int    @id @default(autoincrement())
+  key   String @unique
+  value String @db.Text
+}
