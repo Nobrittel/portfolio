@@ -1,79 +1,33 @@
 import { useState } from 'react'
 import { AnimatePresence, motion } from 'framer-motion'
 import { useSettings } from '../context/settings'
+import { useApi } from '../hooks/useApi'
+import DataStatus from './DataStatus'
 
 const categoryKeys = ['all', 'frontend', 'backend', 'fullstack', 'api', 'academic']
 
-// À MODIFIER : technologies, catégories, statuts et liens
-// Les titres et descriptions sont dans src/i18n/translations.js
-const projects = [
-  {
-    id: 'timeteach',
-    category: 'fullstack',
-    technologies: ['PHP', 'MySQL', 'Bootstrap', 'JavaScript'],
-    status: 'done',
-    github: '#',
-    demo: '#',
-  },
-  {
-    id: 'api',
-    category: 'api',
-    technologies: ['Node.js', 'Express', 'MySQL'],
-    status: 'done',
-    github: '#',
-    demo: '#',
-  },
-  {
-    id: 'showcase',
-    category: 'frontend',
-    technologies: ['React', 'Tailwind CSS'],
-    status: 'done',
-    github: '#',
-    demo: '#',
-  },
-  {
-    id: 'gym',
-    category: 'fullstack',
-    technologies: ['PHP', 'MySQL', 'Bootstrap'],
-    status: 'done',
-    github: '#',
-    demo: '#',
-  },
-  {
-    id: 'coop',
-    category: 'fullstack',
-    technologies: ['PHP', 'MySQL', 'Bootstrap'],
-    status: 'done',
-    github: '#',
-    demo: '#',
-  },
-  {
-    id: 'appointments',
-    category: 'fullstack',
-    technologies: ['PHP', 'MySQL', 'JavaScript'],
-    status: 'done',
-    github: '#',
-    demo: '#',
-  },
-]
-
 function Projects() {
-  const { t } = useSettings()
+  const { t, lang } = useSettings()
   const p = t.projects
+  const suffix = lang === 'fr' ? 'Fr' : 'En'
+
+  const { data, loading, error } = useApi('/api/projects')
+  const projects = data ?? []
+
   const [activeCategory, setActiveCategory] = useState('all')
   const [search, setSearch] = useState('')
 
   const filteredProjects = projects.filter((project) => {
-    const info = p.items[project.id]
+    const categorySlug = project.category ? project.category.slug : ''
     const matchCategory =
-      activeCategory === 'all' || project.category === activeCategory
+      activeCategory === 'all' || categorySlug === activeCategory
 
     const text = (
-      info.title +
+      project['title' + suffix] +
       ' ' +
-      info.description +
+      project['shortDesc' + suffix] +
       ' ' +
-      p.categories[project.category] +
+      (p.categories[categorySlug] ?? '') +
       ' ' +
       project.technologies.join(' ')
     ).toLowerCase()
@@ -82,6 +36,8 @@ function Projects() {
 
     return matchCategory && matchSearch
   })
+
+  const ready = !loading && !error
 
   return (
     <section id="projets" className="scroll-mt-20 bg-surface px-6 py-24">
@@ -122,9 +78,13 @@ function Projects() {
           ))}
         </div>
 
-        <p className="mt-6 text-center text-sm text-muted">
-          {p.count(filteredProjects.length)}
-        </p>
+        <DataStatus loading={loading} error={error} />
+
+        {ready && (
+          <p className="mt-6 text-center text-sm text-muted">
+            {p.count(filteredProjects.length)}
+          </p>
+        )}
 
         <motion.div
           layout
@@ -132,7 +92,7 @@ function Projects() {
         >
           <AnimatePresence mode="popLayout">
             {filteredProjects.map((project, index) => {
-              const info = p.items[project.id]
+              const categorySlug = project.category ? project.category.slug : ''
               return (
                 <motion.article
                   key={project.id}
@@ -146,25 +106,27 @@ function Projects() {
                 >
                   <div className="flex items-center justify-between text-sm">
                     <span className="text-accent">
-                      {p.categories[project.category]}
+                      {p.categories[categorySlug] ?? ''}
                     </span>
                     <span className="flex items-center gap-2 text-muted">
                       <span
                         className={
                           'h-2 w-2 rounded-full ' +
-                          (project.status === 'ongoing'
+                          (project.progress === 'ongoing'
                             ? 'animate-pulse bg-yellow-400'
                             : 'bg-green-400')
                         }
                       ></span>
-                      {p.status[project.status]}
+                      {p.status[project.progress] ?? project.progress}
                     </span>
                   </div>
 
                   <h3 className="mt-3 text-xl font-semibold text-fg">
-                    {info.title}
+                    {project['title' + suffix]}
                   </h3>
-                  <p className="mt-2 text-muted">{info.description}</p>
+                  <p className="mt-2 text-muted">
+                    {project['shortDesc' + suffix]}
+                  </p>
 
                   <ul className="mt-4 flex flex-wrap gap-2">
                     {project.technologies.map((tech) => (
@@ -178,22 +140,26 @@ function Projects() {
                   </ul>
 
                   <div className="mt-auto flex gap-4 pt-6 text-sm font-semibold">
-                    <a
-                      href={project.demo}
-                      target="_blank"
-                      rel="noreferrer"
-                      className="text-accent transition hover:translate-x-1"
-                    >
-                      {p.demo}
-                    </a>
-                    <a
-                      href={project.github}
-                      target="_blank"
-                      rel="noreferrer"
-                      className="text-body transition hover:translate-x-1 hover:text-fg"
-                    >
-                      {p.github}
-                    </a>
+                    {project.demoUrl && (
+                      <a
+                        href={project.demoUrl}
+                        target="_blank"
+                        rel="noreferrer"
+                        className="text-accent transition hover:translate-x-1"
+                      >
+                        {p.demo}
+                      </a>
+                    )}
+                    {project.githubUrl && (
+                      <a
+                        href={project.githubUrl}
+                        target="_blank"
+                        rel="noreferrer"
+                        className="text-body transition hover:translate-x-1 hover:text-fg"
+                      >
+                        {p.github}
+                      </a>
+                    )}
                   </div>
                 </motion.article>
               )
@@ -201,7 +167,7 @@ function Projects() {
           </AnimatePresence>
         </motion.div>
 
-        {filteredProjects.length === 0 && (
+        {ready && filteredProjects.length === 0 && (
           <motion.p
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}

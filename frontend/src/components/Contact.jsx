@@ -1,17 +1,15 @@
 import { useState } from 'react'
 import { useSettings } from '../context/settings'
+import { API_URL } from '../api'
+
+const emptyForm = { name: '', email: '', subject: '', message: '' }
 
 function Contact() {
   const { t } = useSettings()
   const c = t.contact
 
-  const [form, setForm] = useState({
-    name: '',
-    email: '',
-    subject: '',
-    message: '',
-  })
-  const [sent, setSent] = useState(false)
+  const [form, setForm] = useState(emptyForm)
+  const [status, setStatus] = useState('idle') // idle | sending | success | error
 
   // À MODIFIER : remplace par tes vraies coordonnées
   const links = [
@@ -25,11 +23,24 @@ function Contact() {
     setForm({ ...form, [e.target.name]: e.target.value })
   }
 
-  function handleSubmit(e) {
+  async function handleSubmit(e) {
     e.preventDefault()
-    console.log('Message à envoyer :', form)
-    setSent(true)
-    setForm({ name: '', email: '', subject: '', message: '' })
+    setStatus('sending')
+
+    try {
+      const response = await fetch(API_URL + '/api/messages', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(form),
+      })
+
+      if (!response.ok) throw new Error('HTTP ' + response.status)
+
+      setStatus('success')
+      setForm(emptyForm)
+    } catch {
+      setStatus('error')
+    }
   }
 
   const inputClass =
@@ -80,6 +91,8 @@ function Contact() {
                 name="name"
                 type="text"
                 required
+                minLength={2}
+                maxLength={100}
                 value={form.name}
                 onChange={handleChange}
                 className={inputClass}
@@ -95,6 +108,7 @@ function Contact() {
                 name="email"
                 type="email"
                 required
+                maxLength={150}
                 value={form.email}
                 onChange={handleChange}
                 className={inputClass}
@@ -110,6 +124,8 @@ function Contact() {
                 name="subject"
                 type="text"
                 required
+                minLength={3}
+                maxLength={150}
                 value={form.subject}
                 onChange={handleChange}
                 className={inputClass}
@@ -125,6 +141,8 @@ function Contact() {
                 name="message"
                 rows="5"
                 required
+                minLength={10}
+                maxLength={5000}
                 value={form.message}
                 onChange={handleChange}
                 className={inputClass}
@@ -133,12 +151,14 @@ function Contact() {
 
             <button
               type="submit"
-              className="rounded-lg bg-brand px-6 py-3 font-semibold text-white transition hover:bg-brand-hover"
+              disabled={status === 'sending'}
+              className="rounded-lg bg-brand px-6 py-3 font-semibold text-white transition hover:bg-brand-hover disabled:cursor-not-allowed disabled:opacity-60"
             >
-              {c.send}
+              {status === 'sending' ? c.sending : c.send}
             </button>
 
-            {sent && <p className="text-green-500">{c.success}</p>}
+            {status === 'success' && <p className="text-green-500">{c.success}</p>}
+            {status === 'error' && <p className="text-red-500">{c.error}</p>}
           </form>
         </div>
       </div>

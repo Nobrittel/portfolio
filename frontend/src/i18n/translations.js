@@ -1,6 +1,13 @@
+// Textes de l'interface. Les projets, compétences, expériences et formations
+// viennent maintenant de la base de données (via l'API).
 export const translations = {
   fr: {
     meta: { title: 'Loïc Noudehouenou | Développeur Full-Stack' },
+
+    common: {
+      loading: 'Chargement...',
+      error: "Impossible de charger les données. Vérifie que le serveur est lancé.",
+    },
 
     nav: {
       home: 'Accueil',
@@ -67,168 +74,11 @@ export const translations = {
       github: 'GitHub',
       empty: 'Aucun projet ne correspond à ta recherche.',
       count: (n) => n + ' projet' + (n > 1 ? 's' : '') + ' affiché' + (n > 1 ? 's' : ''),
-      // À MODIFIER : remplace les descriptions par les tiennes
-      items: {
-        timeteach: {
-          title: 'Time Teach',
-          description:
-            "Application web de gestion du temps d'enseignement : planification des cours et suivi des horaires.",
-        },
-        api: {
-          title: 'API de gestion',
-          description:
-            "API REST sécurisée pour gérer des données : routes protégées, authentification et accès à la base de données.",
-        },
-        showcase: {
-          title: 'Site vitrine',
-          description:
-            "Site vitrine responsive pour présenter une activité ou une entreprise.",
-        },
-        gym: {
-          title: 'Site pour salle de sport',
-          description:
-            "Site web pour une salle de sport : présentation des activités, des abonnements et contact.",
-        },
-        coop: {
-          title: 'Site pour coopérative',
-          description:
-            "Site web pour une coopérative : présentation de l'organisation, de ses activités et de ses membres.",
-        },
-        appointments: {
-          title: 'Gestion de rendez-vous',
-          description:
-            "Application web de prise et de gestion de rendez-vous : réservation en ligne, suivi et organisation du planning.",
-        },
-      },
     },
 
-    experience: {
-      title: 'Expériences',
-      items: [
-        {
-          id: 1,
-          position: 'Formateur en Informatique',
-          company: 'Solidarité Alodo de Savalou',
-          location: 'Savalou',
-          period: 'Année académique 2025–2026',
-          missions: [
-            "Formation d'enseignants du primaire aux outils numériques avec des approches pédagogiques adaptées.",
-            'Modules de formation progressifs pour un public non technique.',
-            'Animation de séances interactives favorisant la participation active.',
-          ],
-          tags: ['Formation', 'Pédagogie', 'Outils numériques'],
-        },
-        {
-          id: 2,
-          position: 'Formateur en Informatique',
-          company: 'MAFLYT SARL (partenariat Ministère MEMP)',
-          location: '',
-          period: 'Année académique 2024–2025',
-          missions: [
-            "Formation d'enseignants du primaire aux outils numériques avec des approches pédagogiques adaptées.",
-            'Modules de formation progressifs pour un public non technique.',
-            'Animation de séances interactives favorisant la participation active.',
-          ],
-          tags: ['Formation', 'Pédagogie', 'Outils numériques'],
-        },
-        {
-          id: 3,
-          position: 'Gestionnaire de Salle Numérique',
-          company: 'EUPHORBIA GROUP (ASIN)',
-          location: 'Nikki',
-          period: 'Année académique 2024–2025',
-          missions: [
-            "Encadrement quotidien d'élèves et d'enseignants dans l'usage des outils numériques.",
-            'Gestion du matériel informatique et animation de séances de sensibilisation.',
-            "Création d'un environnement numérique sécurisé et stimulant pour les jeunes apprenants.",
-          ],
-          tags: ['Gestion de matériel', 'Sensibilisation', 'Encadrement'],
-        },
-        {
-          id: 4,
-          position: 'Technicien Informatique',
-          company: '7ème Colloque Scientifique International, Université de Parakou',
-          location: 'Parakou',
-          period: 'Septembre 2024',
-          missions: [
-            'Installation et configuration rapide de postes de travail pour intervenants.',
-            "Diagnostic et résolution immédiate d'incidents matériels et logiciels en temps réel.",
-          ],
-          tags: ['Maintenance', 'Support technique'],
-        },
-        {
-          id: 5,
-          position: 'Stagiaire',
-          company: 'SPTIC, Université de Parakou',
-          location: 'Parakou',
-          period: 'Mai – Août 2024',
-          missions: [
-            "Développement web : création et maintenance d'applications.",
-            'Support utilisateurs, configuration de postes et maintenance applicative.',
-          ],
-          tags: ['Développement web', 'Support', 'Maintenance'],
-        },
-        {
-          id: 6,
-          position: 'Tuteur en Informatique',
-          company: 'Complexe Scolaire Privé « La Relève »',
-          location: 'Parakou',
-          period: 'Avril – Mai 2024 et Juin – Juillet 2023',
-          missions: [
-            "Cours d'initiation à l'informatique pour élèves débutants (bureautique, Internet).",
-            "Animation d'ateliers pratiques avec une approche ludique et participative.",
-            'Élaboration de modules pédagogiques progressifs et évaluation des apprenants.',
-          ],
-          tags: ['Enseignement', 'Bureautique', 'Pédagogie'],
-        },
-        {
-          id: 7,
-          position: 'Stagiaire',
-          company: 'EASYSOFT Company',
-          location: 'Cotonou',
-          period: 'Août – Septembre 2023',
-          missions: [
-            'Développement web frontend et backend.',
-            'Dépannage matériel et applicatif, support clients.',
-          ],
-          tags: ['Frontend', 'Backend', 'Support client'],
-        },
-      ],
-    },
+    experience: { title: 'Expériences' },
 
-    education: {
-      title: 'Formations',
-      items: [
-        {
-          id: 1,
-          diploma: "Master 2 en Génie Logiciel et Intégration d'Application",
-          institution: 'Université de Parakou',
-          period: 'En cours',
-          ongoing: true,
-        },
-        {
-          id: 2,
-          diploma: 'Licence Professionnelle en Informatique de Gestion',
-          institution: 'Université de Parakou',
-          period: '2021 – 2024',
-          ongoing: false,
-        },
-        {
-          id: 3,
-          diploma: 'Certificat Tita Digital Skills',
-          institution: 'Université de Parakou',
-          period: '2025',
-          ongoing: false,
-        },
-        {
-          id: 4,
-          diploma: 'Certificat en Maintenance Informatique et Réseaux',
-          institution: 'Centre Tech Cohésion',
-          period: '2020',
-          ongoing: false,
-        },
-      ],
-    },
+    education: { title: 'Formations' },
 
     contact: {
       title: 'Contact',
@@ -239,7 +89,9 @@ export const translations = {
       subject: 'Sujet',
       message: 'Message',
       send: 'Envoyer',
-      success: "Message prêt. L'envoi réel sera activé avec le backend.",
+      sending: 'Envoi en cours...',
+      success: 'Message envoyé, merci ! Je te réponds bientôt.',
+      error: "Le message n'a pas pu être envoyé. Vérifie les champs et réessaie.",
       whatsapp: 'Discuter sur WhatsApp',
       cv: 'Télécharger mon CV',
     },
@@ -247,6 +99,11 @@ export const translations = {
 
   en: {
     meta: { title: 'Loïc Noudehouenou | Full-Stack Developer' },
+
+    common: {
+      loading: 'Loading...',
+      error: 'Unable to load the data. Check that the server is running.',
+    },
 
     nav: {
       home: 'Home',
@@ -309,167 +166,11 @@ export const translations = {
       github: 'GitHub',
       empty: 'No project matches your search.',
       count: (n) => n + ' project' + (n !== 1 ? 's' : '') + ' shown',
-      items: {
-        timeteach: {
-          title: 'Time Teach',
-          description:
-            'Web application for managing teaching time: course scheduling and timetable tracking.',
-        },
-        api: {
-          title: 'Management API',
-          description:
-            'Secure REST API for managing data: protected routes, authentication and database access.',
-        },
-        showcase: {
-          title: 'Showcase website',
-          description:
-            'Responsive showcase website presenting a business or an activity.',
-        },
-        gym: {
-          title: 'Gym website',
-          description:
-            'Website for a gym: presentation of activities, memberships and contact.',
-        },
-        coop: {
-          title: 'Cooperative website',
-          description:
-            'Website for a cooperative: presentation of the organization, its activities and its members.',
-        },
-        appointments: {
-          title: 'Appointment management',
-          description:
-            'Web application for booking and managing appointments: online booking, tracking and schedule organization.',
-        },
-      },
     },
 
-    experience: {
-      title: 'Experience',
-      items: [
-        {
-          id: 1,
-          position: 'IT Trainer',
-          company: 'Solidarité Alodo de Savalou',
-          location: 'Savalou',
-          period: 'Academic year 2025–2026',
-          missions: [
-            'Training primary school teachers in digital tools using adapted teaching approaches.',
-            'Progressive training modules for a non-technical audience.',
-            'Leading interactive sessions that encourage active participation.',
-          ],
-          tags: ['Training', 'Teaching methods', 'Digital tools'],
-        },
-        {
-          id: 2,
-          position: 'IT Trainer',
-          company: 'MAFLYT SARL (partnership with the MEMP Ministry)',
-          location: '',
-          period: 'Academic year 2024–2025',
-          missions: [
-            'Training primary school teachers in digital tools using adapted teaching approaches.',
-            'Progressive training modules for a non-technical audience.',
-            'Leading interactive sessions that encourage active participation.',
-          ],
-          tags: ['Training', 'Teaching methods', 'Digital tools'],
-        },
-        {
-          id: 3,
-          position: 'Digital Room Manager',
-          company: 'EUPHORBIA GROUP (ASIN)',
-          location: 'Nikki',
-          period: 'Academic year 2024–2025',
-          missions: [
-            'Day-to-day support of students and teachers in using digital tools.',
-            'Management of IT equipment and awareness-raising sessions.',
-            'Creation of a safe and stimulating digital environment for young learners.',
-          ],
-          tags: ['Equipment management', 'Awareness', 'Mentoring'],
-        },
-        {
-          id: 4,
-          position: 'IT Technician',
-          company: '7th International Scientific Colloquium, University of Parakou',
-          location: 'Parakou',
-          period: 'September 2024',
-          missions: [
-            'Fast installation and configuration of workstations for speakers.',
-            'Immediate diagnosis and resolution of hardware and software incidents in real time.',
-          ],
-          tags: ['Maintenance', 'Technical support'],
-        },
-        {
-          id: 5,
-          position: 'Intern',
-          company: 'SPTIC, University of Parakou',
-          location: 'Parakou',
-          period: 'May – August 2024',
-          missions: [
-            'Web development: building and maintaining applications.',
-            'User support, workstation configuration and application maintenance.',
-          ],
-          tags: ['Web development', 'Support', 'Maintenance'],
-        },
-        {
-          id: 6,
-          position: 'IT Tutor',
-          company: 'Private school complex « La Relève »',
-          location: 'Parakou',
-          period: 'April – May 2024 and June – July 2023',
-          missions: [
-            'Introductory IT courses for beginner students (office software, Internet).',
-            'Hands-on workshops with a playful, participatory approach.',
-            'Design of progressive teaching modules and assessment of learners.',
-          ],
-          tags: ['Teaching', 'Office software', 'Teaching methods'],
-        },
-        {
-          id: 7,
-          position: 'Intern',
-          company: 'EASYSOFT Company',
-          location: 'Cotonou',
-          period: 'August – September 2023',
-          missions: [
-            'Frontend and backend web development.',
-            'Hardware and software troubleshooting, customer support.',
-          ],
-          tags: ['Frontend', 'Backend', 'Customer support'],
-        },
-      ],
-    },
+    experience: { title: 'Experience' },
 
-    education: {
-      title: 'Education',
-      items: [
-        {
-          id: 1,
-          diploma: "Master's degree (Master 2) in Software Engineering and Application Integration",
-          institution: 'University of Parakou',
-          period: 'Ongoing',
-          ongoing: true,
-        },
-        {
-          id: 2,
-          diploma: "Professional Bachelor's degree in Business Computing",
-          institution: 'University of Parakou',
-          period: '2021 – 2024',
-          ongoing: false,
-        },
-        {
-          id: 3,
-          diploma: 'Tita Digital Skills Certificate',
-          institution: 'University of Parakou',
-          period: '2025',
-          ongoing: false,
-        },
-        {
-          id: 4,
-          diploma: 'Certificate in IT Maintenance and Networks',
-          institution: 'Centre Tech Cohésion',
-          period: '2020',
-          ongoing: false,
-        },
-      ],
-    },
+    education: { title: 'Education' },
 
     contact: {
       title: 'Contact',
@@ -480,7 +181,9 @@ export const translations = {
       subject: 'Subject',
       message: 'Message',
       send: 'Send',
-      success: 'Message ready. Real sending will be enabled with the backend.',
+      sending: 'Sending...',
+      success: "Message sent, thank you! I'll get back to you soon.",
+      error: 'The message could not be sent. Check the fields and try again.',
       whatsapp: 'Chat on WhatsApp',
       cv: 'Download my CV',
     },

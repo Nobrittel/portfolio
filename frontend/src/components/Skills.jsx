@@ -1,28 +1,9 @@
 import { motion } from 'framer-motion'
 import { useSettings } from '../context/settings'
+import { useApi } from '../hooks/useApi'
+import DataStatus from './DataStatus'
 
-const groups = [
-  {
-    key: 'frontend',
-    items: ['HTML', 'CSS', 'JavaScript', 'TypeScript', 'React', 'Bootstrap', 'Tailwind CSS'],
-  },
-  {
-    key: 'backend',
-    items: ['Node.js', 'Express.js', 'PHP', 'Laravel', 'API REST'],
-  },
-  {
-    key: 'database',
-    items: ['MySQL', 'PostgreSQL', 'MongoDB'],
-  },
-  {
-    key: 'tools',
-    items: ['Git', 'GitHub', 'VS Code', 'Postman'],
-  },
-  {
-    key: 'methods',
-    items: ['Agile', 'Scrum', 'UML'],
-  },
-]
+const groupOrder = ['frontend', 'backend', 'database', 'tools', 'methods']
 
 const grid = {
   hidden: {},
@@ -50,6 +31,14 @@ const badge = {
 
 function Skills() {
   const { t } = useSettings()
+  const { data, loading, error } = useApi('/api/skills')
+
+  const groups = groupOrder
+    .map((key) => ({
+      key,
+      items: (data ?? []).filter((skill) => skill.group === key),
+    }))
+    .filter((group) => group.items.length > 0)
 
   return (
     <section id="competences" className="scroll-mt-20 px-6 py-24">
@@ -58,41 +47,45 @@ function Skills() {
           {t.skills.title}
         </h2>
 
-        <motion.div
-          variants={grid}
-          initial="hidden"
-          whileInView="show"
-          viewport={{ once: true, margin: '-80px' }}
-          className="mt-10 grid gap-6 md:grid-cols-2 lg:grid-cols-3"
-        >
-          {groups.map((group) => (
-            <motion.div
-              key={group.key}
-              variants={card}
-              whileHover={{ y: -6 }}
-              className="group relative overflow-hidden rounded-xl border border-line bg-card p-6 transition-colors hover:border-accent"
-            >
-              <span className="absolute left-0 top-0 h-1 w-full origin-left scale-x-0 bg-accent transition-transform duration-500 group-hover:scale-x-100"></span>
+        <DataStatus loading={loading} error={error} />
 
-              <h3 className="text-xl font-semibold text-accent">
-                {t.skills.groups[group.key]}
-              </h3>
+        {data && (
+          <motion.div
+            variants={grid}
+            initial="hidden"
+            whileInView="show"
+            viewport={{ once: true, margin: '-80px' }}
+            className="mt-10 grid gap-6 md:grid-cols-2 lg:grid-cols-3"
+          >
+            {groups.map((group) => (
+              <motion.div
+                key={group.key}
+                variants={card}
+                whileHover={{ y: -6 }}
+                className="group relative overflow-hidden rounded-xl border border-line bg-card p-6 transition-colors hover:border-accent"
+              >
+                <span className="absolute left-0 top-0 h-1 w-full origin-left scale-x-0 bg-accent transition-transform duration-500 group-hover:scale-x-100"></span>
 
-              <motion.ul variants={badgeList} className="mt-4 flex flex-wrap gap-2">
-                {group.items.map((item) => (
-                  <motion.li
-                    key={item}
-                    variants={badge}
-                    whileHover={{ scale: 1.12, y: -2 }}
-                    className="cursor-default rounded-md bg-chip px-3 py-1 text-sm text-body transition-colors hover:text-accent"
-                  >
-                    {item}
-                  </motion.li>
-                ))}
-              </motion.ul>
-            </motion.div>
-          ))}
-        </motion.div>
+                <h3 className="text-xl font-semibold text-accent">
+                  {t.skills.groups[group.key]}
+                </h3>
+
+                <motion.ul variants={badgeList} className="mt-4 flex flex-wrap gap-2">
+                  {group.items.map((skill) => (
+                    <motion.li
+                      key={skill.id}
+                      variants={badge}
+                      whileHover={{ scale: 1.12, y: -2 }}
+                      className="cursor-default rounded-md bg-chip px-3 py-1 text-sm text-body transition-colors hover:text-accent"
+                    >
+                      {skill.name}
+                    </motion.li>
+                  ))}
+                </motion.ul>
+              </motion.div>
+            ))}
+          </motion.div>
+        )}
       </div>
     </section>
   )

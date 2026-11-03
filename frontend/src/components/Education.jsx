@@ -1,5 +1,7 @@
 import { motion } from 'framer-motion'
 import { useSettings } from '../context/settings'
+import { useApi } from '../hooks/useApi'
+import DataStatus from './DataStatus'
 
 const container = {
   hidden: {},
@@ -12,7 +14,9 @@ const card = {
 }
 
 function Education() {
-  const { t } = useSettings()
+  const { t, lang } = useSettings()
+  const suffix = lang === 'fr' ? 'Fr' : 'En'
+  const { data, loading, error } = useApi('/api/educations')
 
   return (
     <section id="formations" className="scroll-mt-20 bg-surface px-6 py-24">
@@ -21,33 +25,39 @@ function Education() {
           {t.education.title}
         </h2>
 
-        <motion.div
-          variants={container}
-          initial="hidden"
-          whileInView="show"
-          viewport={{ once: true, margin: '-80px' }}
-          className="mt-10 grid gap-6 md:grid-cols-2"
-        >
-          {t.education.items.map((edu) => (
-            <motion.article
-              key={edu.id}
-              variants={card}
-              whileHover={{ y: -6 }}
-              className="group relative overflow-hidden rounded-xl border border-line bg-card p-6 transition-colors hover:border-accent"
-            >
-              <span className="absolute left-0 top-0 h-1 w-full origin-left scale-x-0 bg-accent transition-transform duration-500 group-hover:scale-x-100"></span>
+        <DataStatus loading={loading} error={error} />
 
-              <p className="flex items-center gap-2 text-sm text-accent">
-                {edu.ongoing && (
-                  <span className="h-2 w-2 animate-pulse rounded-full bg-green-400"></span>
-                )}
-                {edu.period}
-              </p>
-              <h3 className="mt-1 text-xl font-semibold text-fg">{edu.diploma}</h3>
-              <p className="mt-1 text-muted">{edu.institution}</p>
-            </motion.article>
-          ))}
-        </motion.div>
+        {data && (
+          <motion.div
+            variants={container}
+            initial="hidden"
+            whileInView="show"
+            viewport={{ once: true, margin: '-80px' }}
+            className="mt-10 grid gap-6 md:grid-cols-2"
+          >
+            {data.map((edu) => (
+              <motion.article
+                key={edu.id}
+                variants={card}
+                whileHover={{ y: -6 }}
+                className="group relative overflow-hidden rounded-xl border border-line bg-card p-6 transition-colors hover:border-accent"
+              >
+                <span className="absolute left-0 top-0 h-1 w-full origin-left scale-x-0 bg-accent transition-transform duration-500 group-hover:scale-x-100"></span>
+
+                <p className="flex items-center gap-2 text-sm text-accent">
+                  {edu.ongoing && (
+                    <span className="h-2 w-2 animate-pulse rounded-full bg-green-400"></span>
+                  )}
+                  {edu['period' + suffix]}
+                </p>
+                <h3 className="mt-1 text-xl font-semibold text-fg">
+                  {edu['diploma' + suffix]}
+                </h3>
+                <p className="mt-1 text-muted">{edu.institution}</p>
+              </motion.article>
+            ))}
+          </motion.div>
+        )}
       </div>
     </section>
   )

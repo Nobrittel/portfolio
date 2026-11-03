@@ -6,7 +6,8 @@
   "type": "module",
   "scripts": {
     "dev": "tsx watch server.js",
-    "start": "node server.js"
+    "start": "node server.js",
+    "seed": "tsx prisma/seed.js"
   },
   "keywords": [],
   "dependencies": {
