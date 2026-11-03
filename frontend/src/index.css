@@ -1,0 +1,58 @@
+@import "tailwindcss";
+
+/* Couleurs du mode clair (par défaut) */
+:root {
+  color-scheme: light;
+  --c-page: #f8fafc;
+  --c-surface: #eef2f7;
+  --c-card: #ffffff;
+  --c-chip: #e2e8f0;
+  --c-line: #cbd5e1;
+  --c-fg: #0f172a;
+  --c-body: #334155;
+  --c-muted: #475569;
+  --c-accent: #2563eb;
+  --c-brand: #2563eb;
+  --c-brand-hover: #1d4ed8;
+}
+
+/* Couleurs du mode sombre : actif quand <html> a la classe "dark" */
+:root.dark {
+  color-scheme: dark;
+  --c-page: #0f172a;
+  --c-surface: #1e293b;
+  --c-card: #131d33;
+  --c-chip: #1e293b;
+  --c-line: #334155;
+  --c-fg: #f8fafc;
+  --c-body: #cbd5e1;
+  --c-muted: #94a3b8;
+  --c-accent: #60a5fa;
+  --c-brand: #3b82f6;
+  --c-brand-hover: #60a5fa;
+}
+
+/* Noms utilisables dans les classes : bg-page, text-fg, border-line, ... */
+@theme inline {
+  --color-page: var(--c-page);
+  --color-surface: var(--c-surface);
+  --color-card: var(--c-card);
+  --color-chip: var(--c-chip);
+  --color-line: var(--c-line);
+  --color-fg: var(--c-fg);
+  --color-body: var(--c-body);
+  --color-muted: var(--c-muted);
+  --color-accent: var(--c-accent);
+  --color-brand: var(--c-brand);
+  --color-brand-hover: var(--c-brand-hover);
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background-color: var(--c-page);
+  color: var(--c-fg);
+  transition: background-color 0.3s, color 0.3s;
+}
