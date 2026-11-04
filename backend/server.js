@@ -10,6 +10,8 @@ import contentRouter from './routes/content.js'
 import messagesRouter from './routes/messages.js'
 import authRouter from './routes/auth.js'
 import adminRouter from './routes/admin.js'
+import adminEventsRouter from './routes/adminEvents.js'
+import trackRouter from './routes/track.js'
 import { requireAuth, requireAdmin } from './middleware/auth.js'
 
 dotenv.config()
@@ -49,14 +51,25 @@ const messageLimiter = rateLimit({
   message: { error: 'Trop de messages envoyés. Réessaie plus tard.' },
 })
 
+// Vues et clics : assez large pour un visiteur normal, bloque les envois en boucle
+const trackLimiter = rateLimit({
+  windowMs: 60 * 1000,
+  limit: 60,
+  standardHeaders: 'draft-7',
+  legacyHeaders: false,
+  message: { error: 'Trop de requêtes.' },
+})
+
 app.get('/api/health', async (req, res) => {
   const projects = await prisma.project.count()
   res.json({ status: 'ok', database: 'connected', projects })
 })
 
 app.use('/api/auth', authRouter)
+app.use('/api/admin/events', requireAuth, requireAdmin, adminEventsRouter)
 app.use('/api/admin', requireAuth, requireAdmin, adminRouter)
 
+app.use('/api/track', trackLimiter, trackRouter)
 app.use('/api/projects', projectsRouter)
 app.use('/api/messages', messageLimiter, messagesRouter)
 app.use('/api', contentRouter)
