@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react'
+import { Link } from 'react-router-dom'
 import { apiRequest } from '../api'
 import { useAuth } from '../context/auth'
 
@@ -60,7 +61,15 @@ export default function AdminProjects() {
     <div>
       <div className="mb-6 flex items-center justify-between">
         <h1 className="text-3xl font-bold">Projets</h1>
-        <span className="text-sm text-muted">{projects.length} au total</span>
+        <div className="flex items-center gap-4">
+          <span className="text-sm text-muted">{projects.length} au total</span>
+          <Link
+            to="/admin/projects/new"
+            className="rounded-lg bg-accent px-4 py-2 text-sm font-semibold text-white"
+          >
+            + Nouveau projet
+          </Link>
+        </div>
       </div>
 
       {error && (
@@ -111,6 +120,12 @@ export default function AdminProjects() {
                 </div>
 
                 <div className="flex flex-wrap gap-2 text-sm">
+                  <Link
+                    to={`/admin/projects/${p.id}/edit`}
+                    className="rounded-lg border border-line px-3 py-1.5 hover:bg-chip"
+                  >
+                    Modifier
+                  </Link>
                   <button
                     disabled={busy}
                     onClick={() => patchProject(p, { published: !p.published })}
