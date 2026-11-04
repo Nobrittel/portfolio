@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import { apiRequest } from '../api'
 import { useAuth } from '../context/auth'
+import { btn } from './adminStyles'
 
 const ADMIN = '/api/admin/skills'
 
@@ -198,17 +199,11 @@ export default function AdminSkills() {
                     <span className="font-medium">{s.name}</span>
                     <span className="ml-3 text-xs text-muted">ordre {s.sortOrder}</span>
                   </div>
-                  <div className="flex gap-2 text-sm">
-                    <button
-                      onClick={() => startEdit(s)}
-                      className="rounded-lg border border-line px-3 py-1.5 hover:bg-chip"
-                    >
+                  <div className="flex gap-2">
+                    <button onClick={() => startEdit(s)} className={btn('edit')}>
                       Modifier
                     </button>
-                    <button
-                      onClick={() => removeSkill(s)}
-                      className="rounded-lg border border-red-500/40 px-3 py-1.5 text-red-500 hover:bg-red-500/10"
-                    >
+                    <button onClick={() => removeSkill(s)} className={btn('danger')}>
                       Supprimer
                     </button>
                   </div>

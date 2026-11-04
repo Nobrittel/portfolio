@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { apiRequest } from '../api'
 import { useAuth } from '../context/auth'
+import { btn } from './adminStyles'
 
 const ADMIN = '/api/admin'
 
@@ -119,31 +120,28 @@ export default function AdminProjects() {
                   </div>
                 </div>
 
-                <div className="flex flex-wrap gap-2 text-sm">
-                  <Link
-                    to={`/admin/projects/${p.id}/edit`}
-                    className="rounded-lg border border-line px-3 py-1.5 hover:bg-chip"
-                  >
+                <div className="flex flex-wrap gap-2">
+                  <Link to={`/admin/projects/${p.id}/edit`} className={btn('edit')}>
                     Modifier
                   </Link>
                   <button
                     disabled={busy}
                     onClick={() => patchProject(p, { published: !p.published })}
-                    className="rounded-lg border border-line px-3 py-1.5 hover:bg-chip disabled:opacity-50"
+                    className={btn(p.published ? 'unpublish' : 'publish')}
                   >
                     {p.published ? 'Dépublier' : 'Publier'}
                   </button>
                   <button
                     disabled={busy}
                     onClick={() => patchProject(p, { featured: !p.featured })}
-                    className="rounded-lg border border-line px-3 py-1.5 hover:bg-chip disabled:opacity-50"
+                    className={btn(p.featured ? 'unfeature' : 'feature')}
                   >
                     {p.featured ? 'Retirer vedette' : 'Mettre en vedette'}
                   </button>
                   <button
                     disabled={busy}
                     onClick={() => removeProject(p)}
-                    className="rounded-lg border border-red-500/40 px-3 py-1.5 text-red-500 hover:bg-red-500/10 disabled:opacity-50"
+                    className={btn('danger')}
                   >
                     Supprimer
                   </button>

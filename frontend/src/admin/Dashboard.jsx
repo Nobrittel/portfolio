@@ -1,10 +1,10 @@
-import { Link } from 'react-router-dom'
 import { useEffect, useState } from 'react'
+import { Link } from 'react-router-dom'
 import { apiRequest } from '../api'
 import { useAuth } from '../context/auth'
 
 function Dashboard() {
-  const { user, logout } = useAuth()
+  const { logout } = useAuth()
   const [stats, setStats] = useState(null)
   const [error, setError] = useState(false)
 
@@ -31,20 +31,23 @@ function Dashboard() {
 
   const cards = stats
     ? [
-        { label: 'Projets', value: stats.projects, detail: stats.published + ' publiés, ' + stats.drafts + ' brouillons' },
-        { label: 'Compétences', value: stats.skills },
+        {
+          label: 'Projets',
+          value: stats.projects,
+          detail: stats.published + ' publiés, ' + stats.drafts + ' brouillons',
+          to: '/admin/projects',
+        },
+        { label: 'Compétences', value: stats.skills, to: '/admin/skills' },
         { label: 'Expériences', value: stats.experiences },
         { label: 'Formations', value: stats.educations },
         { label: 'Messages', value: stats.messages, detail: stats.newMessages + ' nouveaux' },
+        { label: 'Vues', value: '—', detail: 'Bientôt disponible' },
       ]
     : []
-  if (!user) return null
-      
 
   return (
     <div>
-      <h1 className="text-3xl font-bold">Tableau de bord</h1>
-      <p className="mt-2 text-muted">Bonjour {user?.name}.</p>
+      <h1 className="text-3xl font-bold">Statistiques</h1>
 
       {error && (
         <p className="mt-8 text-red-500">
@@ -55,21 +58,26 @@ function Dashboard() {
       {!stats && !error && <p className="mt-8 text-muted">Chargement...</p>}
 
       <div className="mt-8 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-        {cards.map((card) => (
-          <div
-            key={card.label}
-            className="rounded-xl border border-line bg-card p-6"
-          >
-            <p className="text-sm text-muted">{card.label}</p>
-            <p className="mt-2 text-4xl font-bold text-accent">{card.value}</p>
-            {card.detail && (
-              <p className="mt-1 text-sm text-body">{card.detail}</p>
-            )}
-          </div>
-        ))}
+        {cards.map((card) => {
+          const content = (
+            <>
+              <p className="text-sm text-muted">{card.label}</p>
+              <p className="mt-2 text-4xl font-bold text-accent">{card.value}</p>
+              {card.detail && <p className="mt-1 text-sm text-body">{card.detail}</p>}
+            </>
+          )
+          const base = 'rounded-xl border border-line bg-card p-6'
+          return card.to ? (
+            <Link key={card.label} to={card.to} className={base + ' hover:border-accent'}>
+              {content}
+            </Link>
+          ) : (
+            <div key={card.label} className={base}>
+              {content}
+            </div>
+          )
+        })}
       </div>
-       <Link to="/admin/projects" className="mt-8 inline-block text-accent hover:underline">
-        Gérer les projets </Link>
     </div>
   )
 }
