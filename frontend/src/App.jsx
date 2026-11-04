@@ -1,39 +1,39 @@
+import AdminProjects from './admin/AdminProjects'
+import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom'
 import { SettingsProvider } from './context/SettingsProvider'
-import Navbar from './components/Navbar'
-import Hero from './components/Hero'
-import About from './components/About'
-import Skills from './components/Skills'
-import Projects from './components/Projects'
-import Experiences from './components/Experiences'
-import Education from './components/Education'
-import Contact from './components/Contact'
-import Reveal from './components/Reveal'
+import Home from './pages/Home'
+import NotFound from './pages/NotFound'
+import AuthLayout from './admin/AuthLayout'
+import Login from './admin/Login'
+import RequireAuth from './admin/RequireAuth'
+import Dashboard from './admin/Dashboard'
+
 
 function App() {
   return (
     <SettingsProvider>
-      <div className="bg-page text-fg">
-        <Navbar />
-        <Hero />
-        <Reveal>
-          <About />
-        </Reveal>
-        <Reveal>
-          <Skills />
-        </Reveal>
-        <Reveal>
-          <Projects />
-        </Reveal>
-        <Reveal>
-          <Experiences />
-        </Reveal>
-        <Reveal>
-          <Education />
-        </Reveal>
-        <Reveal>
-          <Contact />
-        </Reveal>
-      </div>
+      <BrowserRouter>
+        <Routes>
+          <Route path="/" element={<Home />} />
+
+          <Route path="/admin" element={<AuthLayout />}>
+            <Route path="login" element={<Login />} />
+            <Route element={<RequireAuth />}>
+              <Route index element={<Navigate to="dashboard" replace />} />
+              <Route path="dashboard" element={<Dashboard />} />
+              <Route path="projects" element={<AdminProjects />} />
+            </Route>
+          </Route>
+
+          <Route element={<RequireAuth />}>
+              <Route index element={<Navigate to="dashboard" replace />} />
+              <Route path="dashboard" element={<Dashboard />} />
+              <Route path="projects" element={<AdminProjects />} />
+          </Route>
+
+          <Route path="*" element={<NotFound />} />
+        </Routes>
+      </BrowserRouter>
     </SettingsProvider>
   )
 }
