@@ -10,6 +10,7 @@ import Dashboard from './admin/Dashboard'
 import AdminProjects from './admin/AdminProjects'
 import ProjectForm from './admin/ProjectForm'
 import AdminSkills from './admin/AdminSkills'
+import AdminMessages from './admin/AdminMessages'
 
 function App() {
   return (
@@ -28,6 +29,7 @@ function App() {
                 <Route path="projects/new" element={<ProjectForm />} />
                 <Route path="projects/:id/edit" element={<ProjectForm />} />
                 <Route path="skills" element={<AdminSkills />} />
+                <Route path="messages" element={<AdminMessages />} />
               </Route>
             </Route>
           </Route>

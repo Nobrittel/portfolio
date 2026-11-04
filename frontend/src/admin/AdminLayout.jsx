@@ -8,7 +8,7 @@ const LINKS = [
   { to: '/admin/skills', label: 'Compétences' },
   { label: 'Expériences', soon: true },
   { label: 'Formations', soon: true },
-  { label: 'Messages reçus', soon: true },
+  { to: '/admin/messages', label: 'Messages reçus' },
   { label: 'Clics sur les liens', soon: true },
 ]
 
@@ -43,17 +43,9 @@ function AdminLayout() {
 
         <nav className="flex-1 space-y-1 p-3">
           {LINKS.map((link) =>
-            link.soon ? (
-              <div
-                key={link.label}
-                className="flex items-center justify-between rounded-lg px-3 py-2 text-sm text-muted"
-              >
-                {link.label}
-                <span className="rounded-full bg-chip px-2 py-0.5 text-xs">bientôt</span>
-              </div>
-            ) : (
+            link.to ? (
               <NavLink
-                key={link.to}
+                key={link.label}
                 to={link.to}
                 onClick={() => setOpen(false)}
                 className={({ isActive }) =>
@@ -63,6 +55,14 @@ function AdminLayout() {
               >
                 {link.label}
               </NavLink>
+            ) : (
+              <div
+                key={link.label}
+                className="flex items-center justify-between rounded-lg px-3 py-2 text-sm text-muted"
+              >
+                {link.label}
+                <span className="rounded-full bg-chip px-2 py-0.5 text-xs">bientôt</span>
+              </div>
             )
           )}
         </nav>

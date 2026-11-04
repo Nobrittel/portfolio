@@ -40,7 +40,7 @@ function Dashboard() {
         { label: 'Compétences', value: stats.skills, to: '/admin/skills' },
         { label: 'Expériences', value: stats.experiences },
         { label: 'Formations', value: stats.educations },
-        { label: 'Messages', value: stats.messages, detail: stats.newMessages + ' nouveaux' },
+        { label: 'Messages', value: stats.messages, detail: stats.newMessages + ' nouveaux', to: '/admin/messages' },
         { label: 'Vues', value: '—', detail: 'Bientôt disponible' },
       ]
     : []

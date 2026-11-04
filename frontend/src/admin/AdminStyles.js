@@ -6,6 +6,7 @@ const COLORS = {
   unpublish: 'bg-orange-500 hover:bg-orange-600',
   feature: 'bg-purple-600 hover:bg-purple-700',
   unfeature: 'bg-gray-500 hover:bg-gray-600',
+  reply: 'bg-indigo-600 hover:bg-indigo-700',
   danger: 'bg-red-600 hover:bg-red-700',
 }
 
