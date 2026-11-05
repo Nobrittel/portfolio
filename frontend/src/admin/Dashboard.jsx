@@ -6,6 +6,7 @@ import { useAuth } from '../context/auth'
 function Dashboard() {
   const { logout } = useAuth()
   const [stats, setStats] = useState(null)
+  const [events, setEvents] = useState(null)
   const [error, setError] = useState(false)
 
   useEffect(() => {
@@ -24,6 +25,13 @@ function Dashboard() {
         }
       })
 
+    // Les vues sont facultatives : une erreur ici ne bloque pas le reste
+    apiRequest('/api/admin/events/summary')
+      .then((data) => {
+        if (active) setEvents(data)
+      })
+      .catch(() => {})
+
     return () => {
       active = false
     }
@@ -40,8 +48,18 @@ function Dashboard() {
         { label: 'Compétences', value: stats.skills, to: '/admin/skills' },
         { label: 'Expériences', value: stats.experiences },
         { label: 'Formations', value: stats.educations },
-        { label: 'Messages', value: stats.messages, detail: stats.newMessages + ' nouveaux', to: '/admin/messages' },
-        { label: 'Vues', value: '—', detail: 'Bientôt disponible' },
+        {
+          label: 'Messages',
+          value: stats.messages,
+          detail: stats.newMessages + ' nouveaux',
+          to: '/admin/messages',
+        },
+        {
+          label: 'Vues',
+          value: events ? events.views : '—',
+          detail: events ? events.views30 + ' sur les 30 derniers jours' : 'Chargement…',
+          to: '/admin/links',
+        },
       ]
     : []
 

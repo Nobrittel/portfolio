@@ -9,9 +9,8 @@ const LINKS = [
   { label: 'Expériences', soon: true },
   { label: 'Formations', soon: true },
   { to: '/admin/messages', label: 'Messages reçus' },
-  { label: 'Clics sur les liens', soon: true },
+  { to: '/admin/links', label: 'Clics sur les liens' },
 ]
-
 function AdminLayout() {
   const { user, logout } = useAuth()
   const [open, setOpen] = useState(false)

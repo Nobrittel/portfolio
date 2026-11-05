@@ -11,6 +11,7 @@ import AdminProjects from './admin/AdminProjects'
 import ProjectForm from './admin/ProjectForm'
 import AdminSkills from './admin/AdminSkills'
 import AdminMessages from './admin/AdminMessages'
+import AdminLinks from './admin/AdminLinks'
 
 function App() {
   return (
@@ -30,6 +31,7 @@ function App() {
                 <Route path="projects/:id/edit" element={<ProjectForm />} />
                 <Route path="skills" element={<AdminSkills />} />
                 <Route path="messages" element={<AdminMessages />} />
+                <Route path="links" element={<AdminLinks />} />
               </Route>
             </Route>
           </Route>
