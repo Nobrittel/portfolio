@@ -6,7 +6,7 @@ import { useAuth } from '../context/auth'
 const LINKS = [
   { to: '/admin/projects', label: 'Projets' },
   { to: '/admin/skills', label: 'Compétences' },
-  { label: 'Expériences', soon: true },
+  { to: '/admin/experiences', label: 'Expériences' },
   { to: '/admin/educations', label: 'Formations' },
   { to: '/admin/messages', label: 'Messages reçus' },
   { to: '/admin/links', label: 'Clics sur les liens' },

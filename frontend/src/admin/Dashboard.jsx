@@ -46,7 +46,7 @@ function Dashboard() {
           to: '/admin/projects',
         },
         { label: 'Compétences', value: stats.skills, to: '/admin/skills' },
-        { label: 'Expériences', value: stats.experiences },
+        { label: 'Expériences', value: stats.experiences, to: '/admin/experiences' },
         { label: 'Formations', value: stats.educations, to: '/admin/educations' },
         {
           label: 'Messages',
