@@ -8,10 +8,10 @@ const LINKS = [
   { to: '/admin/skills', label: 'Compétences' },
   { to: '/admin/experiences', label: 'Expériences' },
   { to: '/admin/educations', label: 'Formations' },
+  { to: '/admin/services', label: 'Services' },
   { to: '/admin/messages', label: 'Messages reçus' },
   { to: '/admin/links', label: 'Clics sur les liens' },
 ]
-
 function AdminLayout() {
   const { user, logout } = useAuth()
   const [open, setOpen] = useState(false)

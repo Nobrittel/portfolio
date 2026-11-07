@@ -13,6 +13,7 @@ import ProjectForm from './admin/ProjectForm'
 import AdminSkills from './admin/AdminSkills'
 import AdminExperiences from './admin/AdminExperiences'
 import AdminEducations from './admin/AdminEducations'
+import AdminServices from './admin/AdminServices'
 import AdminMessages from './admin/AdminMessages'
 import AdminLinks from './admin/AdminLinks'
 
@@ -43,6 +44,7 @@ function App() {
                 <Route path="skills" element={<AdminSkills />} />
                 <Route path="experiences" element={<AdminExperiences />} />
                 <Route path="educations" element={<AdminEducations />} />
+                <Route path="services" element={<AdminServices />} />
                 <Route path="messages" element={<AdminMessages />} />
                 <Route path="links" element={<AdminLinks />} />
               </Route>
