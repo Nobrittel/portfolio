@@ -5,6 +5,7 @@ import Skills from '../components/Skills'
 import Projects from '../components/Projects'
 import Experiences from '../components/Experiences'
 import Education from '../components/Education'
+import Services from '../components/Services'
 import Contact from '../components/Contact'
 import Reveal from '../components/Reveal'
 
@@ -27,6 +28,9 @@ function Home() {
       </Reveal>
       <Reveal>
         <Education />
+      </Reveal>
+      <Reveal>
+        <Services />
       </Reveal>
       <Reveal>
         <Contact />

@@ -14,6 +14,7 @@ function Navbar() {
     { name: t.nav.skills, href: '#competences' },
     { name: t.nav.projects, href: '#projets' },
     { name: t.nav.career, href: '#experiences' },
+    { name: t.nav.services, href: '#services' },
     { name: t.nav.contact, href: '#contact' },
   ]
 
@@ -24,7 +25,7 @@ function Navbar() {
           Loïc <span className="text-accent">NOUDEHOUENOU</span>
         </a>
 
-        <ul className="hidden gap-8 lg:flex">
+        <ul className="hidden gap-6 lg:flex xl:gap-8">
           {links.map((link) => (
             <li key={link.href}>
               <a

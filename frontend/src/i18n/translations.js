@@ -1,5 +1,5 @@
-// Textes de l'interface. Les projets, compétences, expériences et formations
-// viennent maintenant de la base de données (via l'API).
+// Textes de l'interface. Les projets, compétences, expériences, formations
+// et services viennent de la base de données (via l'API).
 export const translations = {
   fr: {
     meta: { title: 'Loïc Noudehouenou | Développeur Full-Stack' },
@@ -15,6 +15,7 @@ export const translations = {
       skills: 'Compétences',
       projects: 'Projets',
       career: 'Parcours',
+      services: 'Services',
       contact: 'Contact',
       toggleTheme: 'Changer de thème',
       openMenu: 'Ouvrir le menu',
@@ -80,6 +81,8 @@ export const translations = {
 
     education: { title: 'Formations' },
 
+    services: { title: 'Services' },
+
     contact: {
       title: 'Contact',
       intro:
@@ -111,6 +114,7 @@ export const translations = {
       skills: 'Skills',
       projects: 'Projects',
       career: 'Career',
+      services: 'Services',
       contact: 'Contact',
       toggleTheme: 'Toggle theme',
       openMenu: 'Open menu',
@@ -171,6 +175,8 @@ export const translations = {
     experience: { title: 'Experience' },
 
     education: { title: 'Education' },
+
+    services: { title: 'Services' },
 
     contact: {
       title: 'Contact',
