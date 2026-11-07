@@ -12,15 +12,15 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url))
 export const UPLOAD_DIR = path.join(__dirname, '..', 'uploads')
 await fs.mkdir(UPLOAD_DIR, { recursive: true })
 
-const MAX_SIZE = 5 * 1024 * 1024 // 5 Mo
-
-const upload = multer({
-  storage: multer.memoryStorage(),
-  limits: { fileSize: MAX_SIZE, files: 1 },
-}).single('file')
+function memoryUpload(maxSize) {
+  return multer({
+    storage: multer.memoryStorage(),
+    limits: { fileSize: maxSize, files: 1 },
+  }).single('file')
+}
 
 // On vérifie le contenu réel du fichier, pas son nom ni le type annoncé par le navigateur
-function detectExtension(buffer) {
+function detectImage(buffer) {
   if (buffer.length > 12 && buffer[0] === 0xff && buffer[1] === 0xd8 && buffer[2] === 0xff) {
     return 'jpg'
   }
@@ -36,35 +36,55 @@ function detectExtension(buffer) {
   return null
 }
 
-router.post('/', (req, res, next) => {
-  upload(req, res, async (err) => {
-    if (err) {
-      if (err.code === 'LIMIT_FILE_SIZE') {
-        return res.status(413).json({ error: 'Image trop lourde (5 Mo maximum)' })
-      }
-      return res.status(400).json({ error: 'Envoi invalide' })
-    }
+function detectPdf(buffer) {
+  return buffer.length > 8 && buffer.subarray(0, 5).toString('ascii') === '%PDF-' ? 'pdf' : null
+}
 
-    try {
-      if (!req.file) {
-        return res.status(400).json({ error: 'Aucun fichier reçu' })
+function makeHandler({ upload, detect, tooBig, badFormat }) {
+  return (req, res, next) => {
+    upload(req, res, async (err) => {
+      if (err) {
+        if (err.code === 'LIMIT_FILE_SIZE') return res.status(413).json({ error: tooBig })
+        return res.status(400).json({ error: 'Envoi invalide' })
       }
 
-      const extension = detectExtension(req.file.buffer)
-      if (!extension) {
-        return res
-          .status(400)
-          .json({ error: 'Format non accepté (JPG, PNG ou WebP uniquement)' })
+      try {
+        if (!req.file) return res.status(400).json({ error: 'Aucun fichier reçu' })
+
+        const extension = detect(req.file.buffer)
+        if (!extension) return res.status(400).json({ error: badFormat })
+
+        const name = crypto.randomUUID() + '.' + extension
+        await fs.writeFile(path.join(UPLOAD_DIR, name), req.file.buffer)
+
+        res.status(201).json({ path: '/uploads/' + name })
+      } catch (error) {
+        next(error)
       }
+    })
+  }
+}
 
-      const name = crypto.randomUUID() + '.' + extension
-      await fs.writeFile(path.join(UPLOAD_DIR, name), req.file.buffer)
-
-      res.status(201).json({ path: '/uploads/' + name })
-    } catch (error) {
-      next(error)
-    }
+// Images : JPG, PNG, WebP, 5 Mo
+router.post(
+  '/',
+  makeHandler({
+    upload: memoryUpload(5 * 1024 * 1024),
+    detect: detectImage,
+    tooBig: 'Image trop lourde (5 Mo maximum)',
+    badFormat: 'Format non accepté (JPG, PNG ou WebP uniquement)',
   })
-})
+)
+
+// Documents : PDF, 10 Mo
+router.post(
+  '/document',
+  makeHandler({
+    upload: memoryUpload(10 * 1024 * 1024),
+    detect: detectPdf,
+    tooBig: 'Fichier trop lourd (10 Mo maximum)',
+    badFormat: 'Format non accepté (PDF uniquement)',
+  })
+)
 
 export default router

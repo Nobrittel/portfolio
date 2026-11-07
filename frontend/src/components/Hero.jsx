@@ -1,6 +1,8 @@
 import { useEffect, useState } from 'react'
 import { motion } from 'framer-motion'
 import { useSettings } from '../context/settings'
+import { useApi } from '../hooks/useApi'
+import { imageUrl } from '../api'
 
 const technologies = [
   'JavaScript',
@@ -52,6 +54,10 @@ function useTyping(words, speed = 80, pause = 1600) {
 function Hero() {
   const { t } = useSettings()
   const typedRole = useTyping(t.hero.roles)
+
+  // Photo choisie dans l'administration, sinon la photo par défaut
+  const { data: settings } = useApi('/api/settings')
+  const photo = settings?.profilePhoto ? imageUrl(settings.profilePhoto) : '/photo.png'
 
   return (
     <section
@@ -135,7 +141,7 @@ function Hero() {
           >
             <div className="absolute -inset-4 rounded-3xl bg-brand/20 blur-2xl"></div>
             <img
-              src="/photo.png"
+              src={photo}
               alt={t.hero.photoAlt}
               className="relative h-64 w-64 rounded-2xl border-4 border-line object-cover md:h-80 md:w-80"
             />

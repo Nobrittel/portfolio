@@ -16,6 +16,7 @@ import AdminEducations from './admin/AdminEducations'
 import AdminServices from './admin/AdminServices'
 import AdminMessages from './admin/AdminMessages'
 import AdminLinks from './admin/AdminLinks'
+import AdminSettings from './admin/AdminSettings'
 
 function App() {
   return (
@@ -47,6 +48,7 @@ function App() {
                 <Route path="services" element={<AdminServices />} />
                 <Route path="messages" element={<AdminMessages />} />
                 <Route path="links" element={<AdminLinks />} />
+                <Route path="settings" element={<AdminSettings />} />
               </Route>
             </Route>
           </Route>

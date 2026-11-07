@@ -55,3 +55,26 @@ export function imageUrl(path) {
   if (!path) return ''
   return path.startsWith('/uploads/') ? API_URL + path : path
 }
+
+// Envoie un PDF (CV) à l'administration. Renvoie { path: '/uploads/xxxx.pdf' }
+export async function uploadDocument(file) {
+  const body = new FormData()
+  body.append('file', file)
+
+  const response = await fetch(API_URL + '/api/admin/uploads/document', {
+    method: 'POST',
+    credentials: 'include',
+    body,
+  })
+
+  const data = await response.json().catch(() => null)
+
+  if (!response.ok) {
+    const error = new Error((data && data.error) || 'HTTP ' + response.status)
+    error.status = response.status
+    error.data = data
+    throw error
+  }
+
+  return data
+}

@@ -11,6 +11,7 @@ const LINKS = [
   { to: '/admin/services', label: 'Services' },
   { to: '/admin/messages', label: 'Messages reçus' },
   { to: '/admin/links', label: 'Clics sur les liens' },
+  { to: '/admin/settings', label: 'Photo et CV' },
 ]
 function AdminLayout() {
   const { user, logout } = useAuth()

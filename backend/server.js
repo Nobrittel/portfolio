@@ -13,6 +13,7 @@ import adminRouter from './routes/admin.js'
 import adminEventsRouter from './routes/adminEvents.js'
 import trackRouter from './routes/track.js'
 import uploadsRouter, { UPLOAD_DIR } from './routes/uploads.js'
+import settingsRouter, { adminSettingsRouter } from './routes/settings.js'
 import { requireAuth, requireAdmin } from './middleware/auth.js'
 
 dotenv.config()
@@ -61,7 +62,7 @@ const trackLimiter = rateLimit({
   message: { error: 'Trop de requêtes.' },
 })
 
-// Images envoyées depuis l'administration (visibles par tous les visiteurs)
+// Fichiers envoyés depuis l'administration (visibles par tous les visiteurs)
 app.use('/uploads', express.static(UPLOAD_DIR, { index: false, dotfiles: 'deny' }))
 
 app.get('/api/health', async (req, res) => {
@@ -71,10 +72,12 @@ app.get('/api/health', async (req, res) => {
 
 app.use('/api/auth', authRouter)
 app.use('/api/admin/uploads', requireAuth, requireAdmin, uploadsRouter)
+app.use('/api/admin/settings', requireAuth, requireAdmin, adminSettingsRouter)
 app.use('/api/admin/events', requireAuth, requireAdmin, adminEventsRouter)
 app.use('/api/admin', requireAuth, requireAdmin, adminRouter)
 
 app.use('/api/track', trackLimiter, trackRouter)
+app.use('/api/settings', settingsRouter)
 app.use('/api/projects', projectsRouter)
 app.use('/api/messages', messageLimiter, messagesRouter)
 app.use('/api', contentRouter)

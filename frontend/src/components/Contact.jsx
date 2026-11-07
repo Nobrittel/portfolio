@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { useSettings } from '../context/settings'
-import { API_URL } from '../api'
+import { useApi } from '../hooks/useApi'
+import { API_URL, imageUrl } from '../api'
 
 const emptyForm = { name: '', email: '', subject: '', message: '' }
 
@@ -10,6 +11,10 @@ function Contact() {
 
   const [form, setForm] = useState(emptyForm)
   const [status, setStatus] = useState('idle') // idle | sending | success | error
+
+  // CV choisi dans l'administration, sinon le CV par défaut
+  const { data: settings } = useApi('/api/settings')
+  const cvHref = settings?.cv ? imageUrl(settings.cv) : '/cv.pdf'
 
   // "track" = nom du lien dans les statistiques (lettres, chiffres, tirets)
   const links = [
@@ -93,8 +98,10 @@ function Contact() {
 
             <li>
               <a
-                href="/cv.pdf"
+                href={cvHref}
                 data-track="cv"
+                target="_blank"
+                rel="noreferrer"
                 download
                 className="inline-block rounded-lg bg-brand px-6 py-3 font-semibold text-white transition hover:bg-brand-hover"
               >
