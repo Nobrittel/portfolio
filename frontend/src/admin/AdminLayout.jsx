@@ -7,7 +7,7 @@ const LINKS = [
   { to: '/admin/projects', label: 'Projets' },
   { to: '/admin/skills', label: 'Compétences' },
   { label: 'Expériences', soon: true },
-  { label: 'Formations', soon: true },
+  { to: '/admin/educations', label: 'Formations' },
   { to: '/admin/messages', label: 'Messages reçus' },
   { to: '/admin/links', label: 'Clics sur les liens' },
 ]

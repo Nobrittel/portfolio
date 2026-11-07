@@ -47,7 +47,7 @@ function Dashboard() {
         },
         { label: 'Compétences', value: stats.skills, to: '/admin/skills' },
         { label: 'Expériences', value: stats.experiences },
-        { label: 'Formations', value: stats.educations },
+        { label: 'Formations', value: stats.educations, to: '/admin/educations' },
         {
           label: 'Messages',
           value: stats.messages,
