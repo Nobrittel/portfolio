@@ -78,7 +78,7 @@ function Hero() {
             className="mt-6 text-4xl font-bold leading-tight text-fg md:text-6xl"
           >
             {t.hero.greeting}{' '}
-            <span className="text-accent">Loïc Noudehouenou</span>
+            <span className="text-accent">Loïc NOUDEHOUENOU</span>
           </motion.h1>
 
           <motion.p
@@ -96,12 +96,14 @@ function Hero() {
           <motion.div variants={item} className="mt-8 flex flex-wrap gap-4">
             <a
               href="#projets"
+              data-track="hero-projets"
               className="rounded-lg bg-brand px-6 py-3 font-semibold text-white transition hover:-translate-y-0.5 hover:bg-brand-hover"
             >
               {t.hero.seeProjects}
             </a>
             <a
               href="#contact"
+              data-track="hero-contact"
               className="rounded-lg border border-line px-6 py-3 font-semibold text-fg transition hover:-translate-y-0.5 hover:border-accent hover:text-accent"
             >
               {t.hero.contactMe}
@@ -133,7 +135,7 @@ function Hero() {
           >
             <div className="absolute -inset-4 rounded-3xl bg-brand/20 blur-2xl"></div>
             <img
-              src="/photo.jpg"
+              src="/photo.png"
               alt={t.hero.photoAlt}
               className="relative h-64 w-64 rounded-2xl border-4 border-line object-cover md:h-80 md:w-80"
             />

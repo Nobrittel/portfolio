@@ -11,12 +11,32 @@ function Contact() {
   const [form, setForm] = useState(emptyForm)
   const [status, setStatus] = useState('idle') // idle | sending | success | error
 
-  // À MODIFIER : remplace par tes vraies coordonnées
+  // "track" = nom du lien dans les statistiques (lettres, chiffres, tirets)
   const links = [
-    { name: 'Email', value: 'ton.email@exemple.com', href: 'mailto:ton.email@exemple.com' },
-    { name: 'GitHub', value: 'github.com/ton-compte', href: 'https://github.com/' },
-    { name: 'LinkedIn', value: 'linkedin.com/in/ton-profil', href: 'https://linkedin.com/' },
-    { name: 'WhatsApp', value: c.whatsapp, href: 'https://wa.me/' },
+    {
+      name: 'Email',
+      track: 'email',
+      value: 'loicnoudehouenou693@gmail.com',
+      href: 'mailto:loicnoudehouenou693@gmail.com',
+    },
+    {
+      name: 'GitHub',
+      track: 'github',
+      value: 'github.com/Nobrittel',
+      href: 'https://github.com/Nobrittel/',
+    },
+    {
+      name: 'LinkedIn',
+      track: 'linkedin',
+      value: 'linkedin.com/in/loicnoudehouenou',
+      href: 'https://www.linkedin.com/in/loicnoudehouenou/',
+    },
+    {
+      name: 'WhatsApp',
+      track: 'whatsapp',
+      value: c.whatsapp,
+      href: 'https://wa.me/+2290160748998',
+    },
   ]
 
   function handleChange(e) {
@@ -60,6 +80,7 @@ function Contact() {
               <li key={link.name}>
                 <a
                   href={link.href}
+                  data-track={link.track}
                   target="_blank"
                   rel="noreferrer"
                   className="block rounded-xl border border-line bg-card p-4 transition hover:border-accent"
@@ -73,6 +94,7 @@ function Contact() {
             <li>
               <a
                 href="/cv.pdf"
+                data-track="cv"
                 download
                 className="inline-block rounded-lg bg-brand px-6 py-3 font-semibold text-white transition hover:bg-brand-hover"
               >

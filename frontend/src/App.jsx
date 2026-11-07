@@ -2,6 +2,7 @@ import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom'
 import { SettingsProvider } from './context/SettingsProvider'
 import Home from './pages/Home'
 import NotFound from './pages/NotFound'
+import Tracker from './Tracker'
 import AuthLayout from './admin/AuthLayout'
 import AdminLayout from './admin/AdminLayout'
 import Login from './admin/Login'
@@ -18,7 +19,15 @@ function App() {
     <SettingsProvider>
       <BrowserRouter>
         <Routes>
-          <Route path="/" element={<Home />} />
+          <Route
+            path="/"
+            element={
+              <>
+                <Tracker />
+                <Home />
+              </>
+            }
+          />
 
           <Route path="/admin" element={<AuthLayout />}>
             <Route path="login" element={<Login />} />

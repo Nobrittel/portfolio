@@ -11,6 +11,7 @@ const LINKS = [
   { to: '/admin/messages', label: 'Messages reçus' },
   { to: '/admin/links', label: 'Clics sur les liens' },
 ]
+
 function AdminLayout() {
   const { user, logout } = useAuth()
   const [open, setOpen] = useState(false)
