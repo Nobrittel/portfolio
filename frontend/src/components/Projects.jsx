@@ -1,54 +1,49 @@
-import { useState } from "react";
-import { AnimatePresence, motion } from "framer-motion";
-import { useSettings } from "../context/settings";
-import { useApi } from "../hooks/useApi";
-import DataStatus from "./DataStatus";
+import { useState } from 'react'
+import { AnimatePresence, motion } from 'framer-motion'
+import { useSettings } from '../context/settings'
+import { useApi } from '../hooks/useApi'
+import { imageUrl } from '../api'
+import DataStatus from './DataStatus'
 
-const categoryKeys = [
-  "all",
-  "frontend",
-  "backend",
-  "fullstack",
-  "api",
-  "academic",
-];
+const categoryKeys = ['all', 'frontend', 'backend', 'fullstack', 'api', 'academic']
+
 // Nom du lien dans les statistiques, ex : projet-mon-portfolio-github (60 caractères max)
 function trackName(project, kind) {
   return ('projet-' + (project.slug || project.id) + '-' + kind).slice(0, 60)
 }
 
 function Projects() {
-  const { t, lang } = useSettings();
-  const p = t.projects;
-  const suffix = lang === "fr" ? "Fr" : "En";
+  const { t, lang } = useSettings()
+  const p = t.projects
+  const suffix = lang === 'fr' ? 'Fr' : 'En'
 
-  const { data, loading, error } = useApi("/api/projects");
-  const projects = data ?? [];
+  const { data, loading, error } = useApi('/api/projects')
+  const projects = data ?? []
 
-  const [activeCategory, setActiveCategory] = useState("all");
-  const [search, setSearch] = useState("");
+  const [activeCategory, setActiveCategory] = useState('all')
+  const [search, setSearch] = useState('')
 
   const filteredProjects = projects.filter((project) => {
-    const categorySlug = project.category ? project.category.slug : "";
+    const categorySlug = project.category ? project.category.slug : ''
     const matchCategory =
-      activeCategory === "all" || categorySlug === activeCategory;
+      activeCategory === 'all' || categorySlug === activeCategory
 
     const text = (
-      project["title" + suffix] +
-      " " +
-      project["shortDesc" + suffix] +
-      " " +
-      (p.categories[categorySlug] ?? "") +
-      " " +
-      project.technologies.join(" ")
-    ).toLowerCase();
+      project['title' + suffix] +
+      ' ' +
+      project['shortDesc' + suffix] +
+      ' ' +
+      (p.categories[categorySlug] ?? '') +
+      ' ' +
+      project.technologies.join(' ')
+    ).toLowerCase()
 
-    const matchSearch = text.includes(search.toLowerCase());
+    const matchSearch = text.includes(search.toLowerCase())
 
-    return matchCategory && matchSearch;
-  });
+    return matchCategory && matchSearch
+  })
 
-  const ready = !loading && !error;
+  const ready = !loading && !error
 
   return (
     <section id="projets" className="scroll-mt-20 bg-surface px-6 py-24">
@@ -71,16 +66,16 @@ function Projects() {
               key={key}
               onClick={() => setActiveCategory(key)}
               className={
-                "relative rounded-full px-4 py-2 text-sm transition " +
+                'relative rounded-full px-4 py-2 text-sm transition ' +
                 (activeCategory === key
-                  ? "font-semibold text-white"
-                  : "bg-card text-body hover:text-accent")
+                  ? 'font-semibold text-white'
+                  : 'bg-card text-body hover:text-accent')
               }
             >
               {activeCategory === key && (
                 <motion.span
                   layoutId="activeCategory"
-                  transition={{ type: "spring", stiffness: 400, damping: 30 }}
+                  transition={{ type: 'spring', stiffness: 400, damping: 30 }}
                   className="absolute inset-0 rounded-full bg-brand"
                 />
               )}
@@ -103,7 +98,7 @@ function Projects() {
         >
           <AnimatePresence mode="popLayout">
             {filteredProjects.map((project, index) => {
-              const categorySlug = project.category ? project.category.slug : "";
+              const categorySlug = project.category ? project.category.slug : ''
               return (
                 <motion.article
                   key={project.id}
@@ -113,18 +108,28 @@ function Projects() {
                   exit={{ opacity: 0, scale: 0.9 }}
                   transition={{ duration: 0.4, delay: index * 0.06 }}
                   whileHover={{ y: -8 }}
-                  className="flex flex-col rounded-xl border border-line bg-card p-6 transition-colors hover:border-accent hover:shadow-lg hover:shadow-brand/10">
+                  className="flex flex-col rounded-xl border border-line bg-card p-6 transition-colors hover:border-accent hover:shadow-lg hover:shadow-brand/10"
+                >
+                  {project.image && (
+                    <img
+                      src={imageUrl(project.image)}
+                      alt={project['title' + suffix]}
+                      loading="lazy"
+                      className="mb-4 h-44 w-full rounded-lg object-cover"
+                    />
+                  )}
+
                   <div className="flex items-center justify-between text-sm">
                     <span className="text-accent">
-                      {p.categories[categorySlug] ?? ""}
+                      {p.categories[categorySlug] ?? ''}
                     </span>
                     <span className="flex items-center gap-2 text-muted">
                       <span
                         className={
-                          "h-2 w-2 rounded-full " +
-                          (project.progress === "ongoing"
-                            ? "animate-pulse bg-yellow-400"
-                            : "bg-green-400")
+                          'h-2 w-2 rounded-full ' +
+                          (project.progress === 'ongoing'
+                            ? 'animate-pulse bg-yellow-400'
+                            : 'bg-green-400')
                         }
                       ></span>
                       {p.status[project.progress] ?? project.progress}
@@ -132,17 +137,18 @@ function Projects() {
                   </div>
 
                   <h3 className="mt-3 text-xl font-semibold text-fg">
-                    {project["title" + suffix]}
+                    {project['title' + suffix]}
                   </h3>
                   <p className="mt-2 text-muted">
-                    {project["shortDesc" + suffix]}
+                    {project['shortDesc' + suffix]}
                   </p>
 
                   <ul className="mt-4 flex flex-wrap gap-2">
                     {project.technologies.map((tech) => (
                       <li
                         key={tech}
-                        className="rounded-md bg-chip px-2 py-1 text-xs text-body">
+                        className="rounded-md bg-chip px-2 py-1 text-xs text-body"
+                      >
                         {tech}
                       </li>
                     ))}
@@ -152,28 +158,28 @@ function Projects() {
                     {project.demoUrl && (
                       <a
                         href={project.demoUrl}
-                        data-track={trackName(project, "demo")}
+                        data-track={trackName(project, 'demo')}
                         target="_blank"
                         rel="noreferrer"
                         className="text-accent transition hover:translate-x-1"
                       >
-                        {p.demo}{" "}
+                        {p.demo}
                       </a>
                     )}
                     {project.githubUrl && (
                       <a
                         href={project.githubUrl}
-                        data-track={trackName(project, "github")}
+                        data-track={trackName(project, 'github')}
                         target="_blank"
                         rel="noreferrer"
                         className="text-body transition hover:translate-x-1 hover:text-fg"
                       >
-                        {p.github}{" "}
+                        {p.github}
                       </a>
                     )}
                   </div>
                 </motion.article>
-              );
+              )
             })}
           </AnimatePresence>
         </motion.div>
@@ -189,7 +195,7 @@ function Projects() {
         )}
       </div>
     </section>
-  );
+  )
 }
 
-export default Projects;
+export default Projects

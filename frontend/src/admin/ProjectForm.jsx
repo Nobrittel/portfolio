@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react'
 import { Link, useNavigate, useParams } from 'react-router-dom'
 import { apiRequest } from '../api'
 import { useAuth } from '../context/auth'
+import ImageUpload from './ImageUpload'
 
 const ADMIN = '/api/admin'
 
@@ -242,13 +243,14 @@ export default function ProjectForm() {
           </Field>
         </div>
         <div className="grid gap-4 sm:grid-cols-2">
-          <Field
-            label="Image"
-            error={errors.image}
-            hint="Chemin du fichier (ex : /projet.jpg) ou URL. L'upload viendra plus tard."
-          >
-            <input className={inputClass} value={form.image} onChange={set('image')} />
-          </Field>
+          <div>
+            <span className="mb-1 block text-sm font-medium text-fg">Image</span>
+            <ImageUpload
+              value={form.image}
+              onChange={(path) => setForm((f) => ({ ...f, image: path }))}
+              error={errors.image}
+            />
+          </div>
           <Field label="Date du projet" error={errors.projectDate}>
             <input type="date" className={inputClass} value={form.projectDate} onChange={set('projectDate')} />
           </Field>

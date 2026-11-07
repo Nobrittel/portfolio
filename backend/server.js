@@ -12,6 +12,7 @@ import authRouter from './routes/auth.js'
 import adminRouter from './routes/admin.js'
 import adminEventsRouter from './routes/adminEvents.js'
 import trackRouter from './routes/track.js'
+import uploadsRouter, { UPLOAD_DIR } from './routes/uploads.js'
 import { requireAuth, requireAdmin } from './middleware/auth.js'
 
 dotenv.config()
@@ -60,12 +61,16 @@ const trackLimiter = rateLimit({
   message: { error: 'Trop de requêtes.' },
 })
 
+// Images envoyées depuis l'administration (visibles par tous les visiteurs)
+app.use('/uploads', express.static(UPLOAD_DIR, { index: false, dotfiles: 'deny' }))
+
 app.get('/api/health', async (req, res) => {
   const projects = await prisma.project.count()
   res.json({ status: 'ok', database: 'connected', projects })
 })
 
 app.use('/api/auth', authRouter)
+app.use('/api/admin/uploads', requireAuth, requireAdmin, uploadsRouter)
 app.use('/api/admin/events', requireAuth, requireAdmin, adminEventsRouter)
 app.use('/api/admin', requireAuth, requireAdmin, adminRouter)
 

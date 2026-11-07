@@ -24,3 +24,34 @@ export async function apiRequest(path, { method = 'GET', body } = {}) {
 
   return data
 }
+
+// Envoie une image à l'administration. Renvoie { path: '/uploads/xxxx.jpg' }
+export async function uploadImage(file) {
+  const body = new FormData()
+  body.append('file', file)
+
+  // Pas d'en-tête Content-Type ici : le navigateur le fixe lui-même pour un fichier
+  const response = await fetch(API_URL + '/api/admin/uploads', {
+    method: 'POST',
+    credentials: 'include',
+    body,
+  })
+
+  const data = await response.json().catch(() => null)
+
+  if (!response.ok) {
+    const error = new Error((data && data.error) || 'HTTP ' + response.status)
+    error.status = response.status
+    error.data = data
+    throw error
+  }
+
+  return data
+}
+
+// Adresse complète d'une image : celles envoyées via l'administration (/uploads/...)
+// sont servies par le backend, les autres (ex : /photo.png) par le frontend.
+export function imageUrl(path) {
+  if (!path) return ''
+  return path.startsWith('/uploads/') ? API_URL + path : path
+}
