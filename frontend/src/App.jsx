@@ -1,5 +1,6 @@
 import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom'
 import { SettingsProvider } from './context/SettingsProvider'
+import ErrorBoundary from './ErrorBoundary'
 import Home from './pages/Home'
 import ProjectDetail from './pages/ProjectDetail'
 import NotFound from './pages/NotFound'
@@ -21,53 +22,55 @@ import AdminSettings from './admin/AdminSettings'
 
 function App() {
   return (
-    <SettingsProvider>
-      <BrowserRouter>
-        <Routes>
-          <Route
-            path="/"
-            element={
-              <>
-                <Tracker />
-                <Home />
-              </>
-            }
-          />
+    <ErrorBoundary>
+      <SettingsProvider>
+        <BrowserRouter>
+          <Routes>
+            <Route
+              path="/"
+              element={
+                <>
+                  <Tracker />
+                  <Home />
+                </>
+              }
+            />
 
-          <Route
-            path="/projets/:slug"
-            element={
-              <>
-                <Tracker />
-                <ProjectDetail />
-              </>
-            }
-          />
+            <Route
+              path="/projets/:slug"
+              element={
+                <>
+                  <Tracker />
+                  <ProjectDetail />
+                </>
+              }
+            />
 
-          <Route path="/admin" element={<AuthLayout />}>
-            <Route path="login" element={<Login />} />
-            <Route element={<RequireAuth />}>
-              <Route element={<AdminLayout />}>
-                <Route index element={<Navigate to="dashboard" replace />} />
-                <Route path="dashboard" element={<Dashboard />} />
-                <Route path="projects" element={<AdminProjects />} />
-                <Route path="projects/new" element={<ProjectForm />} />
-                <Route path="projects/:id/edit" element={<ProjectForm />} />
-                <Route path="skills" element={<AdminSkills />} />
-                <Route path="experiences" element={<AdminExperiences />} />
-                <Route path="educations" element={<AdminEducations />} />
-                <Route path="services" element={<AdminServices />} />
-                <Route path="messages" element={<AdminMessages />} />
-                <Route path="links" element={<AdminLinks />} />
-                <Route path="settings" element={<AdminSettings />} />
+            <Route path="/admin" element={<AuthLayout />}>
+              <Route path="login" element={<Login />} />
+              <Route element={<RequireAuth />}>
+                <Route element={<AdminLayout />}>
+                  <Route index element={<Navigate to="dashboard" replace />} />
+                  <Route path="dashboard" element={<Dashboard />} />
+                  <Route path="projects" element={<AdminProjects />} />
+                  <Route path="projects/new" element={<ProjectForm />} />
+                  <Route path="projects/:id/edit" element={<ProjectForm />} />
+                  <Route path="skills" element={<AdminSkills />} />
+                  <Route path="experiences" element={<AdminExperiences />} />
+                  <Route path="educations" element={<AdminEducations />} />
+                  <Route path="services" element={<AdminServices />} />
+                  <Route path="messages" element={<AdminMessages />} />
+                  <Route path="links" element={<AdminLinks />} />
+                  <Route path="settings" element={<AdminSettings />} />
+                </Route>
               </Route>
             </Route>
-          </Route>
 
-          <Route path="*" element={<NotFound />} />
-        </Routes>
-      </BrowserRouter>
-    </SettingsProvider>
+            <Route path="*" element={<NotFound />} />
+          </Routes>
+        </BrowserRouter>
+      </SettingsProvider>
+    </ErrorBoundary>
   )
 }
 
