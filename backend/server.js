@@ -11,6 +11,7 @@ import messagesRouter from './routes/messages.js'
 import authRouter from './routes/auth.js'
 import adminRouter from './routes/admin.js'
 import adminEventsRouter from './routes/adminEvents.js'
+import adminGalleryRouter from './routes/adminGallery.js'
 import trackRouter from './routes/track.js'
 import uploadsRouter, { UPLOAD_DIR } from './routes/uploads.js'
 import settingsRouter, { adminSettingsRouter } from './routes/settings.js'
@@ -72,6 +73,7 @@ app.get('/api/health', async (req, res) => {
 
 app.use('/api/auth', authRouter)
 app.use('/api/admin/uploads', requireAuth, requireAdmin, uploadsRouter)
+app.use('/api/admin/gallery', requireAuth, requireAdmin, adminGalleryRouter)
 app.use('/api/admin/settings', requireAuth, requireAdmin, adminSettingsRouter)
 app.use('/api/admin/events', requireAuth, requireAdmin, adminEventsRouter)
 app.use('/api/admin', requireAuth, requireAdmin, adminRouter)

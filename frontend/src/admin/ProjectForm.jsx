@@ -3,6 +3,7 @@ import { Link, useNavigate, useParams } from 'react-router-dom'
 import { apiRequest } from '../api'
 import { useAuth } from '../context/auth'
 import ImageUpload from './ImageUpload'
+import GalleryManager from './GalleryManager'
 
 const ADMIN = '/api/admin'
 
@@ -103,6 +104,7 @@ export default function ProjectForm() {
   const { logout } = useAuth()
 
   const [form, setForm] = useState(EMPTY)
+  const [gallery, setGallery] = useState([])
   const [errors, setErrors] = useState({})
   const [globalError, setGlobalError] = useState('')
   const [loading, setLoading] = useState(isEdit)
@@ -112,7 +114,10 @@ export default function ProjectForm() {
   useEffect(() => {
     if (!isEdit) return
     apiRequest(`${ADMIN}/projects/${id}`)
-      .then((p) => setForm(toForm(p)))
+      .then((p) => {
+        setForm(toForm(p))
+        setGallery(p.images || [])
+      })
       .catch((e) => {
         if (e.status === 401) logout()
         else setGlobalError(e.message)
@@ -199,10 +204,18 @@ export default function ProjectForm() {
         <Field label="Description courte (anglais)" error={errors.shortDescEn} hint="500 caractères maximum">
           <textarea rows={2} className={inputClass} value={form.shortDescEn} onChange={set('shortDescEn')} />
         </Field>
-        <Field label="Description complète (français)" error={errors.descriptionFr}>
+        <Field
+          label="Description complète (français)"
+          error={errors.descriptionFr}
+          hint="Affichée sur la page du projet. Laisse une ligne vide entre deux paragraphes."
+        >
           <textarea rows={6} className={inputClass} value={form.descriptionFr} onChange={set('descriptionFr')} />
         </Field>
-        <Field label="Description complète (anglais)" error={errors.descriptionEn}>
+        <Field
+          label="Description complète (anglais)"
+          error={errors.descriptionEn}
+          hint="Affichée sur la page du projet. Laisse une ligne vide entre deux paragraphes."
+        >
           <textarea rows={6} className={inputClass} value={form.descriptionEn} onChange={set('descriptionEn')} />
         </Field>
       </section>
@@ -244,7 +257,7 @@ export default function ProjectForm() {
         </div>
         <div className="grid gap-4 sm:grid-cols-2">
           <div>
-            <span className="mb-1 block text-sm font-medium text-fg">Image</span>
+            <span className="mb-1 block text-sm font-medium text-fg">Image principale</span>
             <ImageUpload
               value={form.image}
               onChange={(path) => setForm((f) => ({ ...f, image: path }))}
@@ -255,6 +268,18 @@ export default function ProjectForm() {
             <input type="date" className={inputClass} value={form.projectDate} onChange={set('projectDate')} />
           </Field>
         </div>
+      </section>
+
+      <section className="space-y-4 rounded-xl border border-line bg-card p-6">
+        <h2 className="text-lg font-semibold">Galerie</h2>
+        {isEdit ? (
+          <GalleryManager projectId={id} initialImages={gallery} />
+        ) : (
+          <p className="text-sm text-muted">
+            Enregistre d'abord le projet, puis reviens le modifier pour ajouter des images à sa
+            galerie.
+          </p>
+        )}
       </section>
 
       <section className="space-y-3 rounded-xl border border-line bg-card p-6">
