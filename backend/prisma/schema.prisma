@@ -4,7 +4,7 @@ generator client {
 }
 
 datasource db {
-  provider = "mysql"
+  provider = "postgresql"
 }
 
 enum MessageStatus {
@@ -133,7 +133,7 @@ model Setting {
 model Event {
   id        Int      @id @default(autoincrement())
   type      String   // "VIEW" (visite) ou "CLICK" (clic sur un lien)
-  label     String?  // pour un clic : le nom du lien (ex : github-portfolio, whatsapp, cv)
+  label     String?  // pour un clic : le nom du lien (ex : github, whatsapp, cv)
   path      String?  // page où l'événement a eu lieu (ex : /)
   createdAt DateTime @default(now())
 
