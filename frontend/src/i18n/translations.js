@@ -41,13 +41,12 @@ export const translations = {
       title: 'À propos',
       p1: "Je suis développeur Full-Stack et formateur en informatique. Je construis des applications Web modernes avec JavaScript, React, Node.js et MySQL, et je sais expliquer la technique à un public qui n'est pas technicien.",
       p2: "Cette expérience de la formation, auprès d'enseignants et d'élèves, m'aide à concevoir des outils clairs et faciles à utiliser. Je prépare actuellement un Master 2 en Génie Logiciel et Intégration d'Application.",
-      stats: [
-        { to: 7, suffix: '', label: 'Projets' },
+            stats: [
+        { key: 'projects', to: 6, suffix: '', label: 'Projets' },
         { to: 3, suffix: ' ans', label: "D'expérience" },
-        { to: 15, suffix: '+', label: 'Technologies' },
+        { key: 'skills', to: 15, suffix: '+', label: 'Technologies' },
       ],
-    },
-
+      },
     skills: {
       title: 'Compétences',
       groups: {
@@ -136,10 +135,10 @@ export const translations = {
       title: 'About',
       p1: "I'm a Full-Stack developer and IT trainer. I build modern web applications with JavaScript, React, Node.js and MySQL, and I can explain technical topics to non-technical audiences.",
       p2: "This training experience, with teachers and students, helps me design tools that are clear and easy to use. I am currently pursuing a Master's degree (Master 2) in Software Engineering and Application Integration.",
-      stats: [
-        { to: 7, suffix: '', label: 'Projects' },
+            stats: [
+        { key: 'projects', to: 6, suffix: '', label: 'Projects' },
         { to: 3, suffix: ' years', label: 'Of experience' },
-        { to: 15, suffix: '+', label: 'Technologies' },
+        { key: 'skills', to: 15, suffix: '+', label: 'Technologies' },
       ],
     },
 

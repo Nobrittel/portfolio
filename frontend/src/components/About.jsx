@@ -1,6 +1,7 @@
 import { useEffect, useRef } from 'react'
 import { animate, motion, useInView } from 'framer-motion'
 import { useSettings } from '../context/settings'
+import { useApi } from '../hooks/useApi'
 
 const list = {
   hidden: {},
@@ -45,8 +46,40 @@ function CountUp({ to, suffix = '' }) {
   return <span ref={ref}>0{suffix}</span>
 }
 
+// Compte les éléments, que l'API renvoie une liste ou des groupes de listes
+function countItems(data) {
+  if (Array.isArray(data)) return data.length
+  if (data && typeof data === 'object') {
+    return Object.values(data).reduce(
+      (total, group) => total + (Array.isArray(group) ? group.length : 0),
+      0
+    )
+  }
+  return 0
+}
+
 function About() {
   const { t } = useSettings()
+
+  // Les compteurs lisent la base : un projet publié de plus, et le chiffre monte tout seul
+  const projects = useApi('/api/projects')
+  const skills = useApi('/api/skills')
+
+  // Renvoie la valeur à afficher, ou null pendant le chargement
+  function countFor(stat) {
+    const source =
+      stat.key === 'projects' ? projects : stat.key === 'skills' ? skills : null
+
+    // Pas de source (ex : années d'expérience) : valeur écrite dans translations.js
+    if (!source) return { value: stat.to, suffix: stat.suffix }
+
+    if (source.data) return { value: countItems(source.data), suffix: '' }
+
+    // Serveur injoignable : on affiche la valeur de secours de translations.js
+    if (source.error) return { value: stat.to, suffix: stat.suffix }
+
+    return null
+  }
 
   return (
     <section id="apropos" className="scroll-mt-20 bg-surface px-6 py-24">
@@ -74,19 +107,22 @@ function About() {
             viewport={{ once: true, margin: '-80px' }}
             className="grid grid-cols-3 gap-4 self-start"
           >
-            {t.about.stats.map((stat) => (
-              <motion.li
-                key={stat.label}
-                variants={statItem}
-                whileHover={{ y: -6 }}
-                className="rounded-xl border border-line bg-card p-4 text-center transition-colors hover:border-accent"
-              >
-                <p className="text-3xl font-bold text-accent">
-                  <CountUp to={stat.to} suffix={stat.suffix} />
-                </p>
-                <p className="mt-1 text-sm text-muted">{stat.label}</p>
-              </motion.li>
-            ))}
+            {t.about.stats.map((stat) => {
+              const count = countFor(stat)
+              return (
+                <motion.li
+                  key={stat.label}
+                  variants={statItem}
+                  whileHover={{ y: -6 }}
+                  className="rounded-xl border border-line bg-card p-4 text-center transition-colors hover:border-accent"
+                >
+                  <p className="text-3xl font-bold text-accent">
+                    {count ? <CountUp to={count.value} suffix={count.suffix} /> : <span>0</span>}
+                  </p>
+                  <p className="mt-1 text-sm text-muted">{stat.label}</p>
+                </motion.li>
+              )
+            })}
           </motion.ul>
         </div>
       </div>
