@@ -1,8 +1,9 @@
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
 import { useSettings } from '../context/settings'
 import { useApi } from '../hooks/useApi'
 import { imageUrl } from '../api'
+import Lightbox from '../components/Lightbox'
 
 // Petits textes propres à cette page
 const labels = {
@@ -12,6 +13,11 @@ const labels = {
     technologies: 'Technologies',
     about: 'À propos du projet',
     gallery: 'Galerie',
+    zoom: "Agrandir l'image",
+    dialog: 'Image agrandie',
+    close: 'Fermer',
+    previous: 'Image précédente',
+    next: 'Image suivante',
   },
   en: {
     back: '← Back to site',
@@ -19,6 +25,11 @@ const labels = {
     technologies: 'Technologies',
     about: 'About the project',
     gallery: 'Gallery',
+    zoom: 'Enlarge image',
+    dialog: 'Enlarged image',
+    close: 'Close',
+    previous: 'Previous image',
+    next: 'Next image',
   },
 }
 
@@ -38,6 +49,9 @@ function ProjectDetail() {
   const suffix = lang === 'fr' ? 'Fr' : 'En'
 
   const { data: project, loading, error } = useApi('/api/projects/' + encodeURIComponent(slug))
+
+  // Image ouverte en grand : null = aucune, sinon son numéro
+  const [viewer, setViewer] = useState(null)
 
   const title = project ? project['title' + suffix] : ''
 
@@ -134,6 +148,14 @@ function ProjectDetail() {
     .map((img) => (typeof img === 'string' ? img : img.url))
     .filter(Boolean)
 
+  // Toutes les images qu'on peut agrandir : l'image principale, puis la galerie
+  const slides = []
+  if (project.image) slides.push(imageUrl(project.image))
+  for (const url of gallery) {
+    const full = imageUrl(url)
+    if (!slides.includes(full)) slides.push(full)
+  }
+
   const date = project.projectDate
     ? new Date(project.projectDate).toLocaleDateString(lang === 'fr' ? 'fr-FR' : 'en-GB', {
         year: 'numeric',
@@ -147,11 +169,18 @@ function ProjectDetail() {
 
       <main className="mx-auto max-w-4xl px-6 py-12">
         {project.image && (
-          <img
-            src={imageUrl(project.image)}
-            alt={title}
-            className="mb-8 max-h-96 w-full rounded-xl border border-line object-cover"
-          />
+          <button
+            type="button"
+            onClick={() => setViewer(0)}
+            aria-label={l.zoom}
+            className="group mb-8 block w-full cursor-zoom-in overflow-hidden rounded-xl border border-line"
+          >
+            <img
+              src={imageUrl(project.image)}
+              alt={title}
+              className="max-h-96 w-full object-cover transition duration-300 group-hover:scale-105"
+            />
+          </button>
         )}
 
         <div className="flex flex-wrap items-center gap-x-4 gap-y-1 text-sm">
@@ -232,18 +261,36 @@ function ProjectDetail() {
             <ul className="mt-4 grid gap-4 sm:grid-cols-2">
               {gallery.map((url) => (
                 <li key={url}>
-                  <img
-                    src={imageUrl(url)}
-                    alt={title}
-                    loading="lazy"
-                    className="h-56 w-full rounded-xl border border-line object-cover"
-                  />
+                  <button
+                    type="button"
+                    onClick={() => setViewer(slides.indexOf(imageUrl(url)))}
+                    aria-label={l.zoom}
+                    className="group block w-full cursor-zoom-in overflow-hidden rounded-xl border border-line"
+                  >
+                    <img
+                      src={imageUrl(url)}
+                      alt={title}
+                      loading="lazy"
+                      className="h-56 w-full object-cover transition duration-300 group-hover:scale-105"
+                    />
+                  </button>
                 </li>
               ))}
             </ul>
           </section>
         )}
       </main>
+
+      {viewer !== null && slides[viewer] && (
+        <Lightbox
+          images={slides}
+          index={viewer}
+          alt={title}
+          labels={l}
+          onClose={() => setViewer(null)}
+          onChange={setViewer}
+        />
+      )}
     </div>
   )
 }
