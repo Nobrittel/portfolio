@@ -1,8 +1,9 @@
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import { useParams } from 'react-router-dom'
 import { useSettings } from '../context/settings'
 import { useApi } from '../hooks/useApi'
 import { imageUrl } from '../api'
+import { truncate, useSeo } from '../seo'
 import Lightbox from '../components/Lightbox'
 
 // Petits textes propres à cette page
@@ -54,16 +55,16 @@ function ProjectDetail() {
   const [viewer, setViewer] = useState(null)
 
   const title = project ? project['title' + suffix] : ''
+  const shortDescription = project ? project['shortDesc' + suffix] : ''
 
-  // Titre de l'onglet du navigateur
-  useEffect(() => {
-    if (!title) return
-    const previous = document.title
-    document.title = title + ' | Loïc Noudehouenou'
-    return () => {
-      document.title = previous
-    }
-  }, [title])
+  // Titre de l'onglet, description, adresse canonique et balises de partage
+  useSeo({
+    title: title ? title + ' | Loïc Noudehouenou' : '',
+    description: truncate(shortDescription),
+    image: project && project.image ? imageUrl(project.image) : '',
+    type: 'article',
+    lang,
+  })
 
   const header = (
     <header className="sticky top-0 z-40 border-b border-line bg-page/80 backdrop-blur">
@@ -198,7 +199,7 @@ function ProjectDetail() {
         </div>
 
         <h1 className="mt-3 text-3xl font-bold md:text-5xl">{title}</h1>
-        <p className="mt-4 text-lg text-muted">{project['shortDesc' + suffix]}</p>
+        <p className="mt-4 text-lg text-muted">{shortDescription}</p>
 
         {technologies.length > 0 && (
           <div className="mt-8">

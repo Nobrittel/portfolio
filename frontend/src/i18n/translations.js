@@ -2,7 +2,7 @@
 // et services viennent de la base de données (via l'API).
 export const translations = {
   fr: {
-    meta: { title: 'Loïc Noudehouenou | Développeur Full-Stack' },
+    meta: { title: 'Loïc Noudehouenou - Développeur Full-Stack' },
 
     common: {
       loading: 'Chargement...',

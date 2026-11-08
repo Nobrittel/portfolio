@@ -13,16 +13,6 @@ const textItem = {
   show: { opacity: 1, x: 0, transition: { duration: 0.6 } },
 }
 
-const statItem = {
-  hidden: { opacity: 0, scale: 0.7, y: 30 },
-  show: {
-    opacity: 1,
-    scale: 1,
-    y: 0,
-    transition: { type: 'spring', stiffness: 200, damping: 15 },
-  },
-}
-
 function CountUp({ to, suffix = '' }) {
   const ref = useRef(null)
   const inView = useInView(ref, { once: true })
@@ -100,30 +90,33 @@ function About() {
             <motion.p variants={textItem}>{t.about.p2}</motion.p>
           </motion.div>
 
-          <motion.ul
-            variants={list}
-            initial="hidden"
-            whileInView="show"
-            viewport={{ once: true, margin: '-80px' }}
-            className="grid grid-cols-3 gap-4 self-start"
-          >
-            {t.about.stats.map((stat) => {
+          {/* Chaque carte s'anime toute seule, sans dépendre du bloc parent */}
+          <ul className="grid grid-cols-3 gap-2 self-start sm:gap-4">
+            {t.about.stats.map((stat, index) => {
               const count = countFor(stat)
               return (
                 <motion.li
                   key={stat.label}
-                  variants={statItem}
+                  initial={{ opacity: 0, scale: 0.7, y: 30 }}
+                  whileInView={{ opacity: 1, scale: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{
+                    type: 'spring',
+                    stiffness: 200,
+                    damping: 15,
+                    delay: index * 0.15,
+                  }}
                   whileHover={{ y: -6 }}
-                  className="rounded-xl border border-line bg-card p-4 text-center transition-colors hover:border-accent"
+                  className="min-w-0 rounded-xl border border-line bg-card p-3 text-center transition-colors hover:border-accent sm:p-4"
                 >
-                  <p className="text-3xl font-bold text-accent">
+                  <p className="text-2xl font-bold text-accent sm:text-3xl">
                     {count ? <CountUp to={count.value} suffix={count.suffix} /> : <span>0</span>}
                   </p>
-                  <p className="mt-1 text-sm text-muted">{stat.label}</p>
+                  <p className="mt-1 break-words text-xs text-muted sm:text-sm">{stat.label}</p>
                 </motion.li>
               )
             })}
-          </motion.ul>
+          </ul>
         </div>
       </div>
     </section>
