@@ -22,7 +22,11 @@ router.get('/', async (req, res) => {
 router.get('/:slug', async (req, res) => {
   const project = await prisma.project.findFirst({
     where: { slug: req.params.slug, published: true },
-    include: { category: true, technologies: true, images: true },
+    include: {
+      category: true,
+      technologies: true,
+      images: { orderBy: { id: 'asc' } },
+    },
   })
 
   if (!project) {
