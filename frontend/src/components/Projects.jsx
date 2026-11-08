@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { Link } from 'react-router-dom'
 import { AnimatePresence, motion } from 'framer-motion'
 import { useSettings } from '../context/settings'
 import { useApi } from '../hooks/useApi'
@@ -16,6 +17,7 @@ function Projects() {
   const { t, lang } = useSettings()
   const p = t.projects
   const suffix = lang === 'fr' ? 'Fr' : 'En'
+  const detailLabel = lang === 'fr' ? 'Voir le détail' : 'View details'
 
   const { data, loading, error } = useApi('/api/projects')
   const projects = data ?? []
@@ -137,7 +139,16 @@ function Projects() {
                   </div>
 
                   <h3 className="mt-3 text-xl font-semibold text-fg">
-                    {project['title' + suffix]}
+                    {project.slug ? (
+                      <Link
+                        to={'/projets/' + project.slug}
+                        className="transition hover:text-accent"
+                      >
+                        {project['title' + suffix]}
+                      </Link>
+                    ) : (
+                      project['title' + suffix]
+                    )}
                   </h3>
                   <p className="mt-2 text-muted">
                     {project['shortDesc' + suffix]}
@@ -154,7 +165,16 @@ function Projects() {
                     ))}
                   </ul>
 
-                  <div className="mt-auto flex gap-4 pt-6 text-sm font-semibold">
+                  <div className="mt-auto flex flex-wrap items-center gap-4 pt-6 text-sm font-semibold">
+                    {project.slug && (
+                      <Link
+                        to={'/projets/' + project.slug}
+                        data-track={trackName(project, 'detail')}
+                        className="rounded-lg bg-brand px-4 py-2 text-white transition hover:-translate-y-0.5 hover:bg-brand-hover"
+                      >
+                        {detailLabel}
+                      </Link>
+                    )}
                     {project.demoUrl && (
                       <a
                         href={project.demoUrl}

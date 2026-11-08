@@ -1,6 +1,7 @@
 import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom'
 import { SettingsProvider } from './context/SettingsProvider'
 import Home from './pages/Home'
+import ProjectDetail from './pages/ProjectDetail'
 import NotFound from './pages/NotFound'
 import Tracker from './Tracker'
 import AuthLayout from './admin/AuthLayout'
@@ -29,6 +30,16 @@ function App() {
               <>
                 <Tracker />
                 <Home />
+              </>
+            }
+          />
+
+          <Route
+            path="/projets/:slug"
+            element={
+              <>
+                <Tracker />
+                <ProjectDetail />
               </>
             }
           />
