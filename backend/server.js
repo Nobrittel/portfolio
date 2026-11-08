@@ -13,6 +13,7 @@ import adminRouter from './routes/admin.js'
 import adminEventsRouter from './routes/adminEvents.js'
 import adminGalleryRouter from './routes/adminGallery.js'
 import trackRouter from './routes/track.js'
+import seoRouter from './routes/seo.js'
 import uploadsRouter, { UPLOAD_DIR } from './routes/uploads.js'
 import settingsRouter, { adminSettingsRouter } from './routes/settings.js'
 import { requireAuth, requireAdmin } from './middleware/auth.js'
@@ -65,6 +66,9 @@ const trackLimiter = rateLimit({
 
 // Fichiers envoyés depuis l'administration (visibles par tous les visiteurs)
 app.use('/uploads', express.static(UPLOAD_DIR, { index: false, dotfiles: 'deny' }))
+
+// robots.txt et sitemap.xml pour les moteurs de recherche
+app.use('/', seoRouter)
 
 app.get('/api/health', async (req, res) => {
   const projects = await prisma.project.count()
