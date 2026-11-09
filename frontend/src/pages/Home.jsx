@@ -20,7 +20,7 @@ const seoTexts = {
     jobTitle: 'Développeur Full-Stack',
   },
   en: {
-    title: 'Loïc Noudehouenou -Full-Stack Developer',
+    title: 'Loïc Noudehouenou - Full-Stack Developer',
     description:
       'Portfolio of Loïc Noudehouenou, Full-Stack developer and IT trainer: web projects, APIs and applications built with JavaScript, React and Node.js.',
     jobTitle: 'Full-Stack Developer',
@@ -51,28 +51,30 @@ function Home() {
   return (
     <div className="bg-page text-fg">
       <Navbar />
-      <Hero />
-      <Reveal>
-        <About />
-      </Reveal>
-      <Reveal>
-        <Skills />
-      </Reveal>
-      <Reveal>
-        <Projects />
-      </Reveal>
-      <Reveal>
-        <Experiences />
-      </Reveal>
-      <Reveal>
-        <Education />
-      </Reveal>
-      <Reveal>
-        <Services />
-      </Reveal>
-      <Reveal>
-        <Contact />
-      </Reveal>
+      <main>
+        <Hero />
+        <Reveal>
+          <About />
+        </Reveal>
+        <Reveal>
+          <Skills />
+        </Reveal>
+        <Reveal>
+          <Projects />
+        </Reveal>
+        <Reveal>
+          <Experiences />
+        </Reveal>
+        <Reveal>
+          <Education />
+        </Reveal>
+        <Reveal>
+          <Services />
+        </Reveal>
+        <Reveal>
+          <Contact />
+        </Reveal>
+      </main>
     </div>
   )
 }

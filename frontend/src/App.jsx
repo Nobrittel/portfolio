@@ -1,73 +1,60 @@
-import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom'
+import { lazy, Suspense } from 'react'
+import { BrowserRouter, Route, Routes } from 'react-router-dom'
 import { SettingsProvider } from './context/SettingsProvider'
 import ErrorBoundary from './ErrorBoundary'
 import Home from './pages/Home'
-import ProjectDetail from './pages/ProjectDetail'
 import NotFound from './pages/NotFound'
 import Tracker from './Tracker'
-import AuthLayout from './admin/AuthLayout'
-import AdminLayout from './admin/AdminLayout'
-import Login from './admin/Login'
-import RequireAuth from './admin/RequireAuth'
-import Dashboard from './admin/Dashboard'
-import AdminProjects from './admin/AdminProjects'
-import ProjectForm from './admin/ProjectForm'
-import AdminSkills from './admin/AdminSkills'
-import AdminExperiences from './admin/AdminExperiences'
-import AdminEducations from './admin/AdminEducations'
-import AdminServices from './admin/AdminServices'
-import AdminMessages from './admin/AdminMessages'
-import AdminLinks from './admin/AdminLinks'
-import AdminSettings from './admin/AdminSettings'
+
+// Ces deux morceaux ne sont téléchargés qu'au moment où on en a besoin
+const ProjectDetail = lazy(() => import('./pages/ProjectDetail'))
+const AdminRoutes = lazy(() => import('./admin/AdminRoutes'))
+
+// Petit rond qui tourne pendant le téléchargement (sans texte, donc valable dans les deux langues)
+function PageLoader() {
+  return (
+    <div className="flex min-h-screen items-center justify-center bg-page">
+      <div
+        role="status"
+        aria-label="Loading"
+        className="h-8 w-8 animate-spin rounded-full border-4 border-line border-t-accent"
+      ></div>
+    </div>
+  )
+}
 
 function App() {
   return (
     <ErrorBoundary>
       <SettingsProvider>
         <BrowserRouter>
-          <Routes>
-            <Route
-              path="/"
-              element={
-                <>
-                  <Tracker />
-                  <Home />
-                </>
-              }
-            />
+          <Suspense fallback={<PageLoader />}>
+            <Routes>
+              <Route
+                path="/"
+                element={
+                  <>
+                    <Tracker />
+                    <Home />
+                  </>
+                }
+              />
 
-            <Route
-              path="/projets/:slug"
-              element={
-                <>
-                  <Tracker />
-                  <ProjectDetail />
-                </>
-              }
-            />
+              <Route
+                path="/projets/:slug"
+                element={
+                  <>
+                    <Tracker />
+                    <ProjectDetail />
+                  </>
+                }
+              />
 
-            <Route path="/admin" element={<AuthLayout />}>
-              <Route path="login" element={<Login />} />
-              <Route element={<RequireAuth />}>
-                <Route element={<AdminLayout />}>
-                  <Route index element={<Navigate to="dashboard" replace />} />
-                  <Route path="dashboard" element={<Dashboard />} />
-                  <Route path="projects" element={<AdminProjects />} />
-                  <Route path="projects/new" element={<ProjectForm />} />
-                  <Route path="projects/:id/edit" element={<ProjectForm />} />
-                  <Route path="skills" element={<AdminSkills />} />
-                  <Route path="experiences" element={<AdminExperiences />} />
-                  <Route path="educations" element={<AdminEducations />} />
-                  <Route path="services" element={<AdminServices />} />
-                  <Route path="messages" element={<AdminMessages />} />
-                  <Route path="links" element={<AdminLinks />} />
-                  <Route path="settings" element={<AdminSettings />} />
-                </Route>
-              </Route>
-            </Route>
+              <Route path="/admin/*" element={<AdminRoutes />} />
 
-            <Route path="*" element={<NotFound />} />
-          </Routes>
+              <Route path="*" element={<NotFound />} />
+            </Routes>
+          </Suspense>
         </BrowserRouter>
       </SettingsProvider>
     </ErrorBoundary>

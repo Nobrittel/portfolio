@@ -57,8 +57,7 @@ function Hero() {
 
   // Photo choisie dans l'administration, sinon la photo par défaut
   const { data: settings } = useApi('/api/settings')
-  const photo = settings?.profilePhoto ? imageUrl(settings.profilePhoto) : '/photo.png'
-
+  const photo = settings?.profilePhoto ? imageUrl(settings.profilePhoto) : '/photo.webp'
   return (
     <section
       id="accueil"
@@ -143,6 +142,10 @@ function Hero() {
             <img
               src={photo}
               alt={t.hero.photoAlt}
+              width="320"
+              height="320"
+              fetchPriority="high"
+              decoding="async"
               className="relative h-64 w-64 rounded-2xl border-4 border-line object-cover md:h-80 md:w-80"
             />
           </motion.div>

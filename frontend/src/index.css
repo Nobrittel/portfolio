@@ -28,8 +28,9 @@
   --c-body: #cbd5e1;
   --c-muted: #94a3b8;
   --c-accent: #60a5fa;
-  --c-brand: #3b82f6;
-  --c-brand-hover: #60a5fa;
+  /* Bleu des boutons : assez foncé pour du texte blanc lisible (contraste 5,2) */
+  --c-brand: #2563eb;
+  --c-brand-hover: #1d4ed8;
 }
 
 /* Noms utilisables dans les classes : bg-page, text-fg, border-line, ... */

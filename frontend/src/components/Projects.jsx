@@ -59,6 +59,7 @@ function Projects() {
           value={search}
           onChange={(e) => setSearch(e.target.value)}
           placeholder={p.searchPlaceholder}
+          aria-label={p.searchPlaceholder}
           className="mx-auto mt-8 block w-full rounded-lg border border-line bg-card px-4 py-3 text-fg outline-none transition placeholder:text-muted focus:border-accent md:w-96"
         />
 
@@ -67,6 +68,7 @@ function Projects() {
             <button
               key={key}
               onClick={() => setActiveCategory(key)}
+              aria-pressed={activeCategory === key}
               className={
                 'relative rounded-full px-4 py-2 text-sm transition ' +
                 (activeCategory === key
@@ -101,6 +103,7 @@ function Projects() {
           <AnimatePresence mode="popLayout">
             {filteredProjects.map((project, index) => {
               const categorySlug = project.category ? project.category.slug : ''
+              const title = project['title' + suffix]
               return (
                 <motion.article
                   key={project.id}
@@ -115,8 +118,9 @@ function Projects() {
                   {project.image && (
                     <img
                       src={imageUrl(project.image)}
-                      alt={project['title' + suffix]}
+                      alt={title}
                       loading="lazy"
+                      decoding="async"
                       className="mb-4 h-44 w-full rounded-lg object-cover"
                     />
                   )}
@@ -144,10 +148,10 @@ function Projects() {
                         to={'/projets/' + project.slug}
                         className="transition hover:text-accent"
                       >
-                        {project['title' + suffix]}
+                        {title}
                       </Link>
                     ) : (
-                      project['title' + suffix]
+                      title
                     )}
                   </h3>
                   <p className="mt-2 text-muted">
@@ -170,6 +174,7 @@ function Projects() {
                       <Link
                         to={'/projets/' + project.slug}
                         data-track={trackName(project, 'detail')}
+                        aria-label={detailLabel + ' : ' + title}
                         className="rounded-lg bg-brand px-4 py-2 text-white transition hover:-translate-y-0.5 hover:bg-brand-hover"
                       >
                         {detailLabel}
@@ -179,6 +184,7 @@ function Projects() {
                       <a
                         href={project.demoUrl}
                         data-track={trackName(project, 'demo')}
+                        aria-label={p.demo + ' : ' + title}
                         target="_blank"
                         rel="noreferrer"
                         className="text-accent transition hover:translate-x-1"
@@ -190,6 +196,7 @@ function Projects() {
                       <a
                         href={project.githubUrl}
                         data-track={trackName(project, 'github')}
+                        aria-label={p.github + ' : ' + title}
                         target="_blank"
                         rel="noreferrer"
                         className="text-body transition hover:translate-x-1 hover:text-fg"
