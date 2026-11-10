@@ -2,6 +2,7 @@ import { motion } from 'framer-motion'
 import { useSettings } from '../context/settings'
 import { useApi } from '../hooks/useApi'
 import DataStatus from './DataStatus'
+import TechLabel from './TechLabel'
 
 const groupOrder = ['frontend', 'backend', 'database', 'tools', 'methods']
 
@@ -78,7 +79,7 @@ function Skills() {
                       whileHover={{ scale: 1.12, y: -2 }}
                       className="cursor-default rounded-md bg-chip px-3 py-1 text-sm text-body transition-colors hover:text-accent"
                     >
-                      {skill.name}
+                      <TechLabel name={skill.name} />
                     </motion.li>
                   ))}
                 </motion.ul>

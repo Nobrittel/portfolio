@@ -5,6 +5,7 @@ import { useSettings } from '../context/settings'
 import { useApi } from '../hooks/useApi'
 import { imageUrl } from '../api'
 import DataStatus from './DataStatus'
+import TechLabel from './TechLabel'
 
 const categoryKeys = ['all', 'frontend', 'backend', 'fullstack', 'api', 'academic']
 
@@ -158,13 +159,13 @@ function Projects() {
                     {project['shortDesc' + suffix]}
                   </p>
 
-                  <ul className="mt-4 flex flex-wrap gap-2">
+                                    <ul className="mt-4 flex flex-wrap gap-2">
                     {project.technologies.map((tech) => (
                       <li
                         key={tech}
                         className="rounded-md bg-chip px-2 py-1 text-xs text-body"
                       >
-                        {tech}
+                        <TechLabel name={tech} className="gap-1.5" />
                       </li>
                     ))}
                   </ul>

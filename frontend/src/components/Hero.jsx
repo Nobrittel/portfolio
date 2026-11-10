@@ -1,17 +1,27 @@
 import { useEffect, useState } from 'react'
 import { motion } from 'framer-motion'
+import {
+  SiExpress,
+  SiGit,
+  SiJavascript,
+  SiNodedotjs,
+  SiPostgresql,
+  SiPrisma,
+  SiReact,
+} from 'react-icons/si'
 import { useSettings } from '../context/settings'
 import { useApi } from '../hooks/useApi'
 import { imageUrl } from '../api'
 
+// Logos officiels (Simple Icons). Sans couleur : le logo prend la couleur du texte.
 const technologies = [
-  'JavaScript',
-  'React',
-  'Node.js',
-  'Express',
-  'MySQL',
-  'Prisma',
-  'Git',
+  { name: 'JavaScript', Icon: SiJavascript, light: '#CA8A04', dark: '#F7DF1E' },
+  { name: 'React', Icon: SiReact, light: '#0891B2', dark: '#61DAFB' },
+  { name: 'Node.js', Icon: SiNodedotjs, light: '#3C873A', dark: '#5FA04E' },
+  { name: 'Express', Icon: SiExpress },
+  { name: 'PostgreSQL', Icon: SiPostgresql, light: '#336791', dark: '#6C9BE0' },
+  { name: 'Prisma', Icon: SiPrisma },
+  { name: 'Git', Icon: SiGit, light: '#F05032', dark: '#F05032' },
 ]
 
 const container = {
@@ -52,12 +62,13 @@ function useTyping(words, speed = 80, pause = 1600) {
 }
 
 function Hero() {
-  const { t } = useSettings()
+  const { t, theme } = useSettings()
   const typedRole = useTyping(t.hero.roles)
 
   // Photo choisie dans l'administration, sinon la photo par défaut
   const { data: settings } = useApi('/api/settings')
   const photo = settings?.profilePhoto ? imageUrl(settings.profilePhoto) : '/photo.webp'
+
   return (
     <section
       id="accueil"
@@ -70,17 +81,9 @@ function Hero() {
           animate="show"
           className="flex-1"
         >
-          <motion.p
-            variants={item}
-            className="inline-flex items-center gap-2 rounded-full border border-line px-4 py-1 text-sm text-body"
-          >
-            <span className="h-2 w-2 animate-pulse rounded-full bg-green-400"></span>
-            {t.hero.available}
-          </motion.p>
-
           <motion.h1
             variants={item}
-            className="mt-6 text-4xl font-bold leading-tight text-fg md:text-6xl"
+            className="text-4xl font-bold leading-tight text-fg md:text-6xl"
           >
             {t.hero.greeting}{' '}
             <span className="text-accent">Loïc NOUDEHOUENOU</span>
@@ -116,15 +119,23 @@ function Hero() {
           </motion.div>
 
           <motion.ul variants={item} className="mt-12 flex flex-wrap gap-3">
-            {technologies.map((tech) => (
-              <motion.li
-                key={tech}
-                whileHover={{ y: -4 }}
-                className="rounded-md bg-chip px-3 py-1 text-sm text-body"
-              >
-                {tech}
-              </motion.li>
-            ))}
+            {technologies.map((tech) => {
+              const color = theme === 'dark' ? tech.dark : tech.light
+              return (
+                <motion.li
+                  key={tech.name}
+                  whileHover={{ y: -4 }}
+                  className="flex items-center gap-2 rounded-md bg-chip px-3 py-1.5 text-sm text-body"
+                >
+                  <tech.Icon
+                    aria-hidden="true"
+                    className="h-4 w-4 shrink-0"
+                    style={color ? { color } : undefined}
+                  />
+                  {tech.name}
+                </motion.li>
+              )
+            })}
           </motion.ul>
         </motion.div>
 

@@ -1,70 +1,74 @@
-import { useState } from 'react'
-import { useParams } from 'react-router-dom'
-import { useSettings } from '../context/settings'
-import { useApi } from '../hooks/useApi'
-import { imageUrl } from '../api'
-import { truncate, useSeo } from '../seo'
-import Lightbox from '../components/Lightbox'
+import { useState } from "react";
+import { useParams } from "react-router-dom";
+import { useSettings } from "../context/settings";
+import { useApi } from "../hooks/useApi";
+import { imageUrl } from "../api";
+import { truncate, useSeo } from "../seo";
+import TechLabel from "../components/TechLabel";
 
 // Petits textes propres à cette page
 const labels = {
   fr: {
-    back: '← Retour au site',
+    back: "← Retour au site",
     notFound: "Ce projet n'existe pas ou n'est plus disponible.",
-    technologies: 'Technologies',
-    about: 'À propos du projet',
-    gallery: 'Galerie',
+    technologies: "Technologies",
+    about: "À propos du projet",
+    gallery: "Galerie",
     zoom: "Agrandir l'image",
-    dialog: 'Image agrandie',
-    close: 'Fermer',
-    previous: 'Image précédente',
-    next: 'Image suivante',
+    dialog: "Image agrandie",
+    close: "Fermer",
+    previous: "Image précédente",
+    next: "Image suivante",
   },
   en: {
-    back: '← Back to site',
-    notFound: 'This project does not exist or is no longer available.',
-    technologies: 'Technologies',
-    about: 'About the project',
-    gallery: 'Gallery',
-    zoom: 'Enlarge image',
-    dialog: 'Enlarged image',
-    close: 'Close',
-    previous: 'Previous image',
-    next: 'Next image',
+    back: "← Back to site",
+    notFound: "This project does not exist or is no longer available.",
+    technologies: "Technologies",
+    about: "About the project",
+    gallery: "Gallery",
+    zoom: "Enlarge image",
+    dialog: "Enlarged image",
+    close: "Close",
+    previous: "Previous image",
+    next: "Next image",
   },
-}
+};
 
 const backButtonClass =
-  'inline-block rounded-lg border border-line px-4 py-2 text-sm font-semibold text-fg transition hover:border-accent hover:text-accent'
+  "inline-block rounded-lg border border-line px-4 py-2 text-sm font-semibold text-fg transition hover:border-accent hover:text-accent";
 
 // Nom du lien dans les statistiques, ex : projet-mon-portfolio-github
 function trackName(slug, kind) {
-  return ('projet-' + slug + '-' + kind).slice(0, 60)
+  return ("projet-" + slug + "-" + kind).slice(0, 60);
 }
 
 function ProjectDetail() {
-  const { slug } = useParams()
-  const { t, lang, setLang, theme, toggleTheme } = useSettings()
-  const p = t.projects
-  const l = labels[lang] ?? labels.fr
-  const suffix = lang === 'fr' ? 'Fr' : 'En'
+  const { slug } = useParams();
+  const { t, lang, setLang, theme, toggleTheme } = useSettings();
+  const p = t.projects;
+  const l = labels[lang] ?? labels.fr;
+  const suffix = lang === "fr" ? "Fr" : "En";
 
-  const { data: project, loading, error } = useApi('/api/projects/' + encodeURIComponent(slug))
+  const {
+    data: project,
+    loading,
+    error,
+  } = useApi("/api/projects/" + encodeURIComponent(slug));
 
   // Image ouverte en grand : null = aucune, sinon son numéro
-  const [viewer, setViewer] = useState(null)
+  const [viewer, setViewer] = useState(null);
 
-  const title = project ? project['title' + suffix] : ''
-  const shortDescription = project ? project['shortDesc' + suffix] : ''
+  const title = project ? project["title" + suffix] : "";
+  const shortDescription = project ? project["shortDesc" + suffix] : "";
 
   // Titre de l'onglet, description, adresse canonique et balises de partage
   useSeo({
-    title: title ? title + ' | Loïc Noudehouenou' : '',
+    title: title ? title + " | Loïc Noudehouenou" : "",
     description: truncate(shortDescription),
-    image: project && project.image ? imageUrl(project.image) : '',
-    type: 'article',
+    image: project && project.image ? imageUrl(project.image) : "",
+    type: "article",
     lang,
-  })
+  });
 
   const header = (
     <header className="sticky top-0 z-40 border-b border-line bg-page/80 backdrop-blur">
@@ -79,14 +83,16 @@ function ProjectDetail() {
             aria-label={t.nav.language}
             className="flex rounded-full border border-line p-0.5 text-xs font-semibold"
           >
-            {['fr', 'en'].map((code) => (
+            {["fr", "en"].map((code) => (
               <button
                 key={code}
                 onClick={() => setLang(code)}
                 aria-pressed={lang === code}
                 className={
-                  'rounded-full px-2.5 py-1 uppercase transition ' +
-                  (lang === code ? 'bg-brand text-white' : 'text-muted hover:text-accent')
+                  "rounded-full px-2.5 py-1 uppercase transition " +
+                  (lang === code
+                    ? "bg-brand text-white"
+                    : "text-muted hover:text-accent")
                 }
               >
                 {code}
@@ -99,21 +105,23 @@ function ProjectDetail() {
             aria-label={t.nav.toggleTheme}
             className="flex h-9 w-9 items-center justify-center rounded-full border border-line text-lg transition hover:border-accent"
           >
-            {theme === 'dark' ? '☀️' : '🌙'}
+            {theme === "dark" ? "☀️" : "🌙"}
           </button>
         </div>
       </div>
     </header>
-  )
+  );
 
   // Chargement
   if (loading) {
     return (
       <div className="min-h-screen bg-page text-fg">
         {header}
-        <p className="mx-auto max-w-4xl px-6 py-16 text-muted">{t.common.loading}</p>
+        <p className="mx-auto max-w-4xl px-6 py-16 text-muted">
+          {t.common.loading}
+        </p>
       </div>
-    )
+    );
   }
 
   // Projet introuvable (adresse fausse, brouillon, serveur éteint)
@@ -123,46 +131,49 @@ function ProjectDetail() {
         {header}
         <div className="mx-auto max-w-4xl px-6 py-16">
           <p className="text-lg text-muted">{l.notFound}</p>
-          <a href="/#projets" className={backButtonClass + ' mt-6'}>
+          <a href="/#projets" className={backButtonClass + " mt-6"}>
             {l.back}
           </a>
         </div>
       </div>
-    )
+    );
   }
 
-  const projectSlug = project.slug || slug
-  const categorySlug = project.category ? project.category.slug : ''
+  const projectSlug = project.slug || slug;
+  const categorySlug = project.category ? project.category.slug : "";
 
   const description =
-    project['description' + suffix] || project['shortDesc' + suffix] || ''
+    project["description" + suffix] || project["shortDesc" + suffix] || "";
   const paragraphs = description
     .split(/\n{2,}/)
     .map((part) => part.trim())
-    .filter(Boolean)
+    .filter(Boolean);
 
   const technologies = (project.technologies || []).map((tech) =>
-    typeof tech === 'string' ? tech : tech.name
-  )
+    typeof tech === "string" ? tech : tech.name,
+  );
 
   const gallery = (Array.isArray(project.images) ? project.images : [])
-    .map((img) => (typeof img === 'string' ? img : img.url))
-    .filter(Boolean)
+    .map((img) => (typeof img === "string" ? img : img.url))
+    .filter(Boolean);
 
   // Toutes les images qu'on peut agrandir : l'image principale, puis la galerie
-  const slides = []
-  if (project.image) slides.push(imageUrl(project.image))
+  const slides = [];
+  if (project.image) slides.push(imageUrl(project.image));
   for (const url of gallery) {
-    const full = imageUrl(url)
-    if (!slides.includes(full)) slides.push(full)
+    const full = imageUrl(url);
+    if (!slides.includes(full)) slides.push(full);
   }
 
   const date = project.projectDate
-    ? new Date(project.projectDate).toLocaleDateString(lang === 'fr' ? 'fr-FR' : 'en-GB', {
-        year: 'numeric',
-        month: 'long',
-      })
-    : ''
+    ? new Date(project.projectDate).toLocaleDateString(
+        lang === "fr" ? "fr-FR" : "en-GB",
+        {
+          year: "numeric",
+          month: "long",
+        },
+      )
+    : "";
 
   return (
     <div className="min-h-screen bg-page text-fg">
@@ -185,12 +196,16 @@ function ProjectDetail() {
         )}
 
         <div className="flex flex-wrap items-center gap-x-4 gap-y-1 text-sm">
-          <span className="text-accent">{p.categories[categorySlug] ?? ''}</span>
+          <span className="text-accent">
+            {p.categories[categorySlug] ?? ""}
+          </span>
           <span className="flex items-center gap-2 text-muted">
             <span
               className={
-                'h-2 w-2 rounded-full ' +
-                (project.progress === 'ongoing' ? 'animate-pulse bg-yellow-400' : 'bg-green-400')
+                "h-2 w-2 rounded-full " +
+                (project.progress === "ongoing"
+                  ? "animate-pulse bg-yellow-400"
+                  : "bg-green-400")
               }
             ></span>
             {p.status[project.progress] ?? project.progress}
@@ -208,8 +223,11 @@ function ProjectDetail() {
             </h2>
             <ul className="mt-3 flex flex-wrap gap-2">
               {technologies.map((tech) => (
-                <li key={tech} className="rounded-md bg-chip px-3 py-1 text-sm text-body">
-                  {tech}
+                <li
+                  key={tech}
+                  className="rounded-md bg-chip px-3 py-1.5 text-sm text-body"
+                >
+                  <TechLabel name={tech} />
                 </li>
               ))}
             </ul>
@@ -221,7 +239,7 @@ function ProjectDetail() {
             {project.demoUrl && (
               <a
                 href={project.demoUrl}
-                data-track={trackName(projectSlug, 'demo')}
+                data-track={trackName(projectSlug, "demo")}
                 target="_blank"
                 rel="noreferrer"
                 className="rounded-lg bg-brand px-6 py-3 font-semibold text-white transition hover:-translate-y-0.5 hover:bg-brand-hover"
@@ -232,7 +250,7 @@ function ProjectDetail() {
             {project.githubUrl && (
               <a
                 href={project.githubUrl}
-                data-track={trackName(projectSlug, 'github')}
+                data-track={trackName(projectSlug, "github")}
                 target="_blank"
                 rel="noreferrer"
                 className="rounded-lg border border-line px-6 py-3 font-semibold text-fg transition hover:-translate-y-0.5 hover:border-accent hover:text-accent"
@@ -293,7 +311,7 @@ function ProjectDetail() {
         />
       )}
     </div>
-  )
+  );
 }
 
-export default ProjectDetail
+export default ProjectDetail;
