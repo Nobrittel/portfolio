@@ -53,8 +53,13 @@ export async function uploadImage(file) {
 // sont servies par le backend, les autres (ex : /photo.png) par le frontend.
 export function imageUrl(path) {
   if (!path) return ''
-  return path.startsWith('/uploads/') ? API_URL + path : path
+  if (path.startsWith('/uploads/')) return API_URL + path
+  if (path.includes('res.cloudinary.com') && path.includes('/image/upload/') && !path.includes('/f_auto')) {
+    return path.replace('/image/upload/', '/image/upload/f_auto,q_auto/')
+  }
+  return path
 }
+
 
 // Envoie un PDF (CV) à l'administration. Renvoie { path: '/uploads/xxxx.pdf' }
 export async function uploadDocument(file) {

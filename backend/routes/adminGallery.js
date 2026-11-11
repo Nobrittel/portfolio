@@ -1,17 +1,12 @@
 import { Router } from 'express'
-import fs from 'node:fs/promises'
-import path from 'node:path'
 import { z } from 'zod'
 import { prisma } from '../lib/prisma.js'
-import { UPLOAD_DIR } from './uploads.js'
+import { deleteStoredFile } from './uploads.js'
 
 // Protégée dans server.js par requireAuth et requireAdmin.
 const router = Router()
 
 const MAX_IMAGES = 12
-
-// Fichiers créés par notre propre envoi d'images : nom aléatoire + extension autorisée
-const UPLOADED_FILE = /^\/uploads\/[0-9a-f-]{36}\.(jpg|png|webp)$/
 
 const bodySchema = z.object({
   url: z
@@ -27,10 +22,8 @@ function toId(value) {
   return Number.isInteger(id) && id > 0 ? id : null
 }
 
-// Supprime le fichier du disque seulement s'il n'est plus utilisé nulle part
+// Supprime le fichier seulement s'il n'est plus utilisé nulle part
 async function removeFileIfUnused(url) {
-  if (!UPLOADED_FILE.test(url)) return
-
   const [inGallery, asMainImage, inSettings] = await Promise.all([
     prisma.projectImage.count({ where: { url } }),
     prisma.project.count({ where: { image: url } }),
@@ -38,7 +31,7 @@ async function removeFileIfUnused(url) {
   ])
   if (inGallery > 0 || asMainImage > 0 || inSettings > 0) return
 
-  await fs.unlink(path.join(UPLOAD_DIR, path.basename(url))).catch(() => {})
+  await deleteStoredFile(url)
 }
 
 // Ajouter une image à la galerie d'un projet
