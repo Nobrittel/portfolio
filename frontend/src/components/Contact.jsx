@@ -1,4 +1,6 @@
 import { useState } from 'react'
+import { SiGithub, SiGmail, SiWhatsapp } from 'react-icons/si'
+import { FaLinkedin } from 'react-icons/fa6'
 import { useSettings } from '../context/settings'
 import { useApi } from '../hooks/useApi'
 import { API_URL, imageUrl } from '../api'
@@ -6,7 +8,7 @@ import { API_URL, imageUrl } from '../api'
 const emptyForm = { name: '', email: '', subject: '', message: '' }
 
 function Contact() {
-  const { t } = useSettings()
+  const { t, theme } = useSettings()
   const c = t.contact
 
   const [form, setForm] = useState(emptyForm)
@@ -17,30 +19,41 @@ function Contact() {
   const cvHref = settings?.cv ? imageUrl(settings.cv) : '/cv.pdf'
 
   // "track" = nom du lien dans les statistiques (lettres, chiffres, tirets)
+  // Icon = logo de l'application ; light / dark = couleur selon le thème
   const links = [
     {
       name: 'Email',
       track: 'email',
       value: 'loicnoudehouenou693@gmail.com',
       href: 'mailto:loicnoudehouenou693@gmail.com',
+      Icon: SiGmail,
+      light: '#EA4335',
+      dark: '#EA4335',
     },
     {
       name: 'GitHub',
       track: 'github',
       value: 'github.com/Nobrittel',
       href: 'https://github.com/Nobrittel/',
+      Icon: SiGithub,
     },
     {
       name: 'LinkedIn',
       track: 'linkedin',
       value: 'linkedin.com/in/loicnoudehouenou',
       href: 'https://www.linkedin.com/in/loicnoudehouenou/',
+      Icon: FaLinkedin,
+      light: '#0A66C2',
+      dark: '#4C9BE0',
     },
     {
       name: 'WhatsApp',
       track: 'whatsapp',
       value: c.whatsapp,
       href: 'https://wa.me/+2290160748998',
+      Icon: SiWhatsapp,
+      light: '#16A34A',
+      dark: '#25D366',
     },
   ]
 
@@ -81,20 +94,30 @@ function Contact() {
 
         <div className="mt-10 grid gap-12 md:grid-cols-2">
           <ul className="space-y-4">
-            {links.map((link) => (
-              <li key={link.name}>
-                <a
-                  href={link.href}
-                  data-track={link.track}
-                  target="_blank"
-                  rel="noreferrer"
-                  className="block rounded-xl border border-line bg-card p-4 transition hover:border-accent"
-                >
-                  <p className="text-sm text-accent">{link.name}</p>
-                  <p className="text-body">{link.value}</p>
-                </a>
-              </li>
-            ))}
+            {links.map((link) => {
+              const color = theme === 'dark' ? link.dark : link.light
+              return (
+                <li key={link.name}>
+                  <a
+                    href={link.href}
+                    data-track={link.track}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="flex items-center gap-4 rounded-xl border border-line bg-card p-4 transition hover:border-accent"
+                  >
+                    <link.Icon
+                      aria-hidden="true"
+                      className="h-7 w-7 shrink-0 text-fg"
+                      style={color ? { color } : undefined}
+                    />
+                    <span className="min-w-0">
+                      <span className="block text-sm text-accent">{link.name}</span>
+                      <span className="block break-words text-body">{link.value}</span>
+                    </span>
+                  </a>
+                </li>
+              )
+            })}
 
             <li>
               <a

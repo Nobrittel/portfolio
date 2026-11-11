@@ -84,8 +84,7 @@ function About() {
             initial="hidden"
             whileInView="show"
             viewport={{ once: true, margin: '-80px' }}
-            className="space-y-4 text-lg text-body"
-          >
+            className="space-y-4 text-lg text-body">
             <motion.p variants={textItem}>{t.about.p1}</motion.p>
             <motion.p variants={textItem}>{t.about.p2}</motion.p>
           </motion.div>
@@ -107,8 +106,7 @@ function About() {
                     delay: index * 0.15,
                   }}
                   whileHover={{ y: -6 }}
-                  className="min-w-0 rounded-xl border border-line bg-card p-3 text-center transition-colors hover:border-accent sm:p-4"
-                >
+                  className="min-w-0 rounded-xl border border-line bg-card p-3 text-center transition-colors hover:border-accent sm:p-4">
                   <p className="text-2xl font-bold text-accent sm:text-3xl">
                     {count ? <CountUp to={count.value} suffix={count.suffix} /> : <span>0</span>}
                   </p>
