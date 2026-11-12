@@ -81,7 +81,16 @@ app.get('/api/health', async (req, res) => {
   const projects = await prisma.project.count()
   res.json({ status: 'ok', database: 'connected', projects })
 })
-
+// Réponse immédiate, sans base de données : sert aux vérifications automatiques
+// (Render, moniteur) sans réveiller ni user la base Neon.
+app.get('/api/ping', (req, res) => {
+  res.json({ status: 'ok' })
+})
+// Réponse immédiate, sans base de données : sert aux vérifications automatiques
+// (Render, moniteur) sans réveiller la base Neon.
+app.get('/api/ping', (req, res) => {
+  res.json({ status: 'ok' })
+})
 app.use('/api/auth', authRouter)
 app.use('/api/admin/uploads', requireAuth, requireAdmin, uploadsRouter)
 app.use('/api/admin/gallery', requireAuth, requireAdmin, adminGalleryRouter)
