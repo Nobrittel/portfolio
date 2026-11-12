@@ -26,8 +26,15 @@ if (!process.env.JWT_SECRET || process.env.JWT_SECRET.length < 32) {
 }
 
 const app = express()
+
+// Le serveur est derrière 2 intermédiaires en production (Netlify puis Render) :
+// sans ce réglage, tous les visiteurs auraient la même adresse IP pour les limites anti-abus
+app.set('trust proxy', 2)
+
 const PORT = process.env.PORT || 5000
 const CLIENT_URL = process.env.CLIENT_URL || 'http://localhost:5173'
+
+app.disable('x-powered-by')
 
 app.disable('x-powered-by')
 app.use(helmet({ crossOriginResourcePolicy: { policy: 'cross-origin' } }))
