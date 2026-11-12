@@ -1,0 +1,38 @@
+[build]
+  command = "npm run build"
+  publish = "dist"
+
+[build.environment]
+  NODE_VERSION = "22"
+
+# Les appels à l'API et les fichiers envoyés passent par Netlify vers Render,
+# donc le navigateur ne voit qu'un seul site (cookies et sécurité plus simples).
+[[redirects]]
+  from = "/api/*"
+  to = "https://portfolio-api-kl72.onrender.com/api/:splat"
+  status = 200
+  force = true
+
+[[redirects]]
+  from = "/uploads/*"
+  to = "https://portfolio-api-kl72.onrender.com/uploads/:splat"
+  status = 200
+  force = true
+
+[[redirects]]
+  from = "/sitemap.xml"
+  to = "https://portfolio-api-kl72.onrender.com/sitemap.xml"
+  status = 200
+  force = true
+
+[[redirects]]
+  from = "/robots.txt"
+  to = "https://portfolio-api-kl72.onrender.com/robots.txt"
+  status = 200
+  force = true
+
+# Pages du site (ex : /projets/mon-projet, /admin/login) : toujours servies par React
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200

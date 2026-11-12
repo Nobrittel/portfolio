@@ -1,5 +1,7 @@
-// Adresse du backend. En production, elle viendra d'une variable d'environnement.
-export const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000'
+// En développement : serveur local. En production : même adresse que le site
+// (Netlify redirige /api vers Render).
+export const API_URL =
+  import.meta.env.VITE_API_URL ?? (import.meta.env.DEV ? 'http://localhost:5000' : '')
 
 // Requête vers l'API avec le cookie de connexion.
 // Renvoie les données JSON, ou lance une erreur avec .status et .data
