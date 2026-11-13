@@ -5,6 +5,15 @@
 [build.environment]
   NODE_VERSION = "22"
 
+[[headers]]
+  for = "/*"
+  [headers.values]
+    X-Frame-Options = "DENY"
+    X-Content-Type-Options = "nosniff"
+    Referrer-Policy = "strict-origin-when-cross-origin"
+    Cross-Origin-Opener-Policy = "same-origin"
+    Permissions-Policy = "camera=(), microphone=(), geolocation=()"
+
 # Les appels à l'API et les fichiers envoyés passent par Netlify vers Render,
 # donc le navigateur ne voit qu'un seul site (cookies et sécurité plus simples).
 [[redirects]]
