@@ -67,7 +67,7 @@ function Hero() {
 
   // Photo choisie dans l'administration, sinon la photo par défaut
   const { data: settings } = useApi('/api/settings')
-  const photo = settings?.profilePhoto ? imageUrl(settings.profilePhoto) : '/photo.webp'
+  const photo = settings?.profilePhoto ? imageUrl(settings.profilePhoto, 640) : '/photo.webp'
 
   return (
     <section

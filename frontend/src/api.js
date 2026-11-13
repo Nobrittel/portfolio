@@ -53,11 +53,12 @@ export async function uploadImage(file) {
 
 // Adresse complète d'une image : celles envoyées via l'administration (/uploads/...)
 // sont servies par le backend, les autres (ex : /photo.png) par le frontend.
-export function imageUrl(path) {
+export function imageUrl(path, width) {
   if (!path) return ''
   if (path.startsWith('/uploads/')) return API_URL + path
   if (path.includes('res.cloudinary.com') && path.includes('/image/upload/') && !path.includes('/f_auto')) {
-    return path.replace('/image/upload/', '/image/upload/f_auto,q_auto/')
+    const transform = 'f_auto,q_auto' + (width ? ',w_' + width + ',c_limit' : '')
+    return path.replace('/image/upload/', '/image/upload/' + transform + '/')
   }
   return path
 }

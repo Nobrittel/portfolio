@@ -118,7 +118,7 @@ function Projects() {
                 >
                   {project.image && (
                     <img
-                      src={imageUrl(project.image)}
+                      src={imageUrl(project.image, 800)}
                       alt={title}
                       loading="lazy"
                       decoding="async"
