@@ -46,7 +46,6 @@
   --color-accent: var(--c-accent);
   --color-brand: var(--c-brand);
   --color-brand-hover: var(--c-brand-hover);
-  --font-sans: 'Plus Jakarta Sans Variable', ui-sans-serif, system-ui, sans-serif;
   --font-display: 'Space Grotesk Variable', ui-sans-serif, system-ui, sans-serif;
 }
 
@@ -58,9 +57,4 @@ body {
   background-color: var(--c-page);
   color: var(--c-fg);
   transition: background-color 0.3s, color 0.3s;
-}
-h1,
-h2,
-h3 {
-  font-family: var(--font-display);
 }
