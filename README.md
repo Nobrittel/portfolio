@@ -1,4 +1,4 @@
-# Portfolio Full-Stack — Loïc NOUDEHOUENOU
+# Portfolio Full-Stack - Loïc NOUDEHOUENOU
 
 🇫🇷 [Français](#-français) · 🇬🇧 [English](#-english)
 
